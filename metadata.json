@@ -1,0 +1,6 @@
+{
+  "name": "Твоя AI-команда за 2 месяца — Indigo Lab",
+  "description": "Мастермайнд для практиков и экспертов: собственная AI-команда вместо отдела маркетинга на полмиллиона.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
