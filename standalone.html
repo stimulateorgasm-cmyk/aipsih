@@ -42,24 +42,23 @@
 
   body {
     background-color: var(--bg);
-    background-image: 
-      radial-gradient(ellipse 90% 50% at 50% -10%, rgba(124, 92, 255, 0.16), transparent 75%),
-      radial-gradient(circle 600px at 85% 20%, rgba(212, 175, 106, 0.04), transparent),
-      radial-gradient(circle 500px at 15% 65%, rgba(124, 92, 255, 0.05), transparent);
+    background-image:
+      radial-gradient(ellipse 90% 50% at 50% -10%, rgba(124, 92, 255, 0.18), transparent 75%),
+      radial-gradient(circle 600px at 88% 12%, rgba(212, 175, 106, 0.06), transparent),
+      radial-gradient(circle 500px at 12% 68%, rgba(124, 92, 255, 0.06), transparent);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
   }
 
-  /* Тонкая сетка на фоне в стиле лаборатории */
   .grid-backdrop {
     position: fixed;
     inset: 0;
     background-size: 60px 60px;
-    background-image: 
+    background-image:
       linear-gradient(to right, rgba(255, 255, 255, 0.018) 1px, transparent 1px),
       linear-gradient(to bottom, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
     pointer-events: none;
@@ -90,6 +89,12 @@
     color: #c4b5fd;
   }
 
+  a:focus-visible,
+  button:focus-visible {
+    outline: 2px solid var(--accent2);
+    outline-offset: 3px;
+  }
+
   /* TOPBAR */
   .topbar {
     display: flex;
@@ -104,10 +109,10 @@
     font-weight: 800;
     font-size: 20px;
     letter-spacing: 0.05em;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
-    color: #fff;
+    color: var(--text-pure);
   }
 
   .logo-dot {
@@ -154,23 +159,23 @@
 
   /* SECTIONS */
   section {
-    padding: 96px 0;
+    padding: 88px 0;
     position: relative;
   }
 
   @media (max-width: 768px) {
     section {
-      padding: 64px 0;
+      padding: 56px 0;
     }
   }
 
   /* TYPOGRAPHY */
   h1 {
-    font-size: clamp(42px, 7vw, 76px);
+    font-size: clamp(40px, 6.2vw, 72px);
     line-height: 1.05;
     font-weight: 800;
     letter-spacing: -0.035em;
-    color: #ffffff;
+    color: var(--text-pure);
     max-width: 900px;
   }
 
@@ -183,12 +188,12 @@
   }
 
   h2 {
-    font-size: clamp(28px, 4.5vw, 44px);
+    font-size: clamp(28px, 4.2vw, 44px);
     font-weight: 800;
     letter-spacing: -0.025em;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     line-height: 1.18;
-    color: #ffffff;
+    color: var(--text-pure);
   }
 
   h3 {
@@ -196,20 +201,20 @@
     font-weight: 700;
     margin-bottom: 8px;
     line-height: 1.3;
-    color: #ffffff;
+    color: var(--text-pure);
   }
 
   .sub {
-    font-size: clamp(19px, 2.5vw, 24px);
+    font-size: clamp(18px, 2.3vw, 22px);
     color: #cfcfdc;
-    max-width: 780px;
-    margin-top: 28px;
+    max-width: 580px;
+    margin-top: 24px;
     line-height: 1.5;
     font-weight: 400;
   }
 
   .sub b {
-    color: #ffffff;
+    color: var(--text-pure);
     font-weight: 600;
   }
 
@@ -218,21 +223,22 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 10px;
     background: linear-gradient(135deg, #8a6bff, #6b46f6);
-    color: #ffffff;
+    color: var(--text-pure);
     font-weight: 700;
-    padding: 20px 44px;
+    padding: 18px 34px;
     border-radius: 16px;
-    margin-top: 36px;
-    font-size: 18px;
+    font-size: 17px;
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     border: 1px solid rgba(255, 255, 255, 0.18);
     cursor: pointer;
-    box-shadow: 0 8px 30px -4px rgba(124, 92, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    box-shadow: 0 8px 30px -4px rgba(124, 92, 255, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.35);
     position: relative;
     overflow: hidden;
     text-align: center;
-    min-height: 58px;
+    min-height: 56px;
+    font-family: inherit;
   }
 
   .btn::after {
@@ -250,8 +256,8 @@
   .btn:hover {
     background: linear-gradient(135deg, #997eff, #7a55fa);
     transform: translateY(-3px);
-    box-shadow: 0 14px 40px -4px rgba(124, 92, 255, 0.65), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-    color: #ffffff;
+    box-shadow: 0 14px 40px -4px rgba(124, 92, 255, 0.68), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    color: var(--text-pure);
   }
 
   .btn:hover::after {
@@ -263,22 +269,56 @@
   }
 
   .btn.ghost {
-    background: rgba(124, 92, 255, 0.06);
-    border: 1px solid rgba(124, 92, 255, 0.35);
+    background: rgba(124, 92, 255, 0.08);
+    border: 1px solid rgba(124, 92, 255, 0.4);
     color: var(--accent2);
     box-shadow: none;
   }
 
   .btn.ghost:hover {
-    background: rgba(124, 92, 255, 0.16);
+    background: rgba(124, 92, 255, 0.18);
     border-color: var(--accent2);
-    color: #ffffff;
+    color: var(--text-pure);
+    box-shadow: 0 8px 24px -6px rgba(124, 92, 255, 0.35);
+  }
+
+  .btn.gold {
+    background: linear-gradient(135deg, rgba(212, 175, 106, 0.18), rgba(212, 175, 106, 0.08));
+    border: 1px solid rgba(212, 175, 106, 0.55);
+    color: #f3d9a4;
+    box-shadow: 0 8px 28px -6px rgba(212, 175, 106, 0.22);
+  }
+
+  .btn.gold:hover {
+    background: linear-gradient(135deg, rgba(212, 175, 106, 0.3), rgba(212, 175, 106, 0.14));
+    border-color: var(--gold);
+    color: var(--text-pure);
+    box-shadow: 0 14px 36px -6px rgba(212, 175, 106, 0.35);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 34px;
+    align-items: center;
+  }
+
+  @media (max-width: 860px) {
+    .hero-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .hero-actions .btn,
+    .btn.full-mobile {
+      width: 100%;
+    }
   }
 
   @media (max-width: 480px) {
     .btn {
       width: 100%;
-      padding: 18px 24px;
+      padding: 16px 22px;
       font-size: 16px;
     }
   }
@@ -311,33 +351,228 @@
 
   /* HERO SECTION */
   .hero-section {
-    padding-top: 90px;
-    padding-bottom: 110px;
+    padding-top: 48px;
+    padding-bottom: 64px;
     position: relative;
+    min-height: 620px;
+    display: flex;
+    align-items: center;
+  }
+
+  .hero-photo {
+    position: absolute;
+    top: 0;
+    right: -40px;
+    bottom: 0;
+    width: 58%;
+    z-index: 0;
+    pointer-events: none;
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.35) 14%, #000 40%),
+      linear-gradient(180deg, #000 72%, transparent 100%);
+    mask-image:
+      linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.35) 14%, #000 40%),
+      linear-gradient(180deg, #000 72%, transparent 100%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+
+  .hero-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center right;
+    filter: saturate(1.06) contrast(1.06);
+  }
+
+  .hero-photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, var(--bg) 0%, rgba(10, 10, 18, 0.55) 18%, transparent 45%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
   }
 
   .hero-glow {
     position: absolute;
-    top: 20%;
-    left: 50%;
+    top: 28%;
+    left: 26%;
     transform: translate(-50%, -50%);
-    width: 680px;
-    height: 400px;
-    background: radial-gradient(ellipse at center, rgba(124, 92, 255, 0.22) 0%, rgba(124, 92, 255, 0.05) 50%, transparent 75%);
+    width: 620px;
+    height: 380px;
+    background: radial-gradient(ellipse at center, rgba(124, 92, 255, 0.25) 0%, rgba(212, 175, 106, 0.05) 45%, transparent 75%);
     filter: blur(60px);
     pointer-events: none;
     z-index: -1;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 860px) {
     .hero-section {
-      padding-top: 50px;
-      padding-bottom: 70px;
+      min-height: auto;
+      padding-top: 34px;
+      padding-bottom: 42px;
+      display: block;
+    }
+    .hero-content {
+      max-width: 100%;
+    }
+    .hero-photo {
+      display: none;
     }
     .hero-glow {
+      left: 50%;
       width: 320px;
       height: 240px;
-      filter: blur(40px);
+      filter: blur(42px);
+    }
+  }
+
+  /* БЛОК A: ВИДЕО-ПЛЕЕР «ПОСМОТРИ, КАК ЭТО РАБОТАЕТ» */
+  .video-section {
+    padding-top: 24px;
+    padding-bottom: 64px;
+  }
+
+  .video-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 36px;
+    align-items: center;
+    background: linear-gradient(160deg, rgba(18, 18, 36, 0.85), rgba(10, 10, 18, 0.92));
+    border: 1px solid var(--line-active);
+    border-radius: 26px;
+    padding: 40px;
+    box-shadow: 0 24px 65px -20px rgba(124, 92, 255, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .video-showcase::before {
+    content: '';
+    position: absolute;
+    top: -90px;
+    right: -90px;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(124, 92, 255, 0.16) 0%, transparent 70%);
+    filter: blur(45px);
+    pointer-events: none;
+  }
+
+  .video-copy p {
+    color: #cfcfdc;
+    font-size: 16.5px;
+    line-height: 1.6;
+    margin-top: 12px;
+  }
+
+  .video-note {
+    margin-top: 14px;
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .video-player-btn {
+    display: block;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(167, 139, 255, 0.35);
+    background: #0b0b15;
+    cursor: pointer;
+    box-shadow: 0 18px 45px -12px rgba(0, 0, 0, 0.75), 0 0 32px -6px rgba(124, 92, 255, 0.3);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    padding: 0;
+  }
+
+  .video-player-btn:hover {
+    transform: translateY(-4px) scale(1.01);
+    border-color: var(--accent2);
+    box-shadow: 0 24px 55px -12px rgba(0, 0, 0, 0.85), 0 0 44px -4px rgba(124, 92, 255, 0.48);
+  }
+
+  .video-player-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(0.78) contrast(1.06);
+    transition: transform 0.5s ease, filter 0.3s ease;
+  }
+
+  .video-player-btn:hover img {
+    transform: scale(1.03);
+    filter: brightness(0.88) contrast(1.08);
+  }
+
+  .video-player-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(10, 10, 18, 0.1) 0%, rgba(10, 10, 18, 0.55) 100%);
+    pointer-events: none;
+  }
+
+  .play-orb {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+    background: rgba(124, 92, 255, 0.88);
+    border: 2px solid rgba(255, 255, 255, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 12px rgba(124, 92, 255, 0.2), 0 10px 30px rgba(0, 0, 0, 0.6);
+    transition: transform 0.25s ease, background 0.25s ease;
+  }
+
+  .video-player-btn:hover .play-orb {
+    transform: translate(-50%, -50%) scale(1.08);
+    background: var(--accent2);
+  }
+
+  .play-orb svg {
+    margin-left: 4px;
+  }
+
+  .video-duration {
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    z-index: 2;
+    background: rgba(10, 10, 18, 0.82);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    color: var(--text-pure);
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 9999px;
+    backdrop-filter: blur(8px);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 900px) {
+    .video-showcase {
+      grid-template-columns: 1fr;
+      padding: 28px 20px;
+      gap: 24px;
+    }
+    .play-orb {
+      width: 60px;
+      height: 60px;
     }
   }
 
@@ -347,7 +582,6 @@
     border: 1px solid rgba(255, 93, 108, 0.35);
     border-radius: 24px;
     padding: 48px;
-    margin-top: 10px;
     position: relative;
     box-shadow: 0 20px 60px -15px rgba(255, 93, 108, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
     overflow: hidden;
@@ -383,6 +617,7 @@
     border-radius: 50%;
     background: var(--red);
     box-shadow: 0 0 10px var(--red);
+    flex-shrink: 0;
   }
 
   .shock .prices {
@@ -392,7 +627,6 @@
     margin-top: 30px;
   }
 
-  /* Стикер / ценник с эффектом выбитой цены */
   .shock .p {
     position: relative;
     text-align: center;
@@ -415,7 +649,6 @@
     height: 6px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.12);
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);
   }
 
   .shock .p:hover {
@@ -439,9 +672,9 @@
     letter-spacing: -0.5px;
     position: relative;
     display: inline-block;
+    font-variant-numeric: tabular-nums;
   }
 
-  /* Красная черта зачёркивания как ударный эффект ценника */
   .shock .p .cost::after {
     content: '';
     position: absolute;
@@ -455,10 +688,11 @@
   }
 
   .shock .p .mo {
-    font-size: 12px;
+    font-size: 12.5px;
     color: var(--muted);
     margin-top: 6px;
     font-weight: 500;
+    font-variant-numeric: tabular-nums;
   }
 
   .shock .total {
@@ -466,25 +700,26 @@
     font-size: clamp(17px, 2vw, 21px);
     color: #d2d2e2;
     text-align: center;
-    background: rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 93, 108, 0.25);
-    border-radius: 16px;
-    padding: 20px 24px;
+    background: rgba(0, 0, 0, 0.42);
+    border: 1px solid rgba(212, 175, 106, 0.35);
+    border-radius: 18px;
+    padding: 22px 24px;
     line-height: 1.5;
+    box-shadow: 0 0 30px -10px var(--gold-glow);
   }
 
   .shock .total b {
-    color: #ffffff;
-    font-size: clamp(22px, 2.6vw, 30px);
+    color: var(--gold);
+    font-size: clamp(24px, 3vw, 34px);
     font-weight: 800;
     letter-spacing: -0.5px;
     display: inline-block;
-    padding: 2px 8px;
-    background: rgba(255, 93, 108, 0.15);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 93, 108, 0.35);
-    text-shadow: 0 0 16px rgba(255, 93, 108, 0.4);
-    margin: 0 4px;
+    padding: 4px 12px;
+    background: rgba(212, 175, 106, 0.12);
+    border-radius: 10px;
+    border: 1px solid rgba(212, 175, 106, 0.42);
+    text-shadow: 0 0 20px rgba(212, 175, 106, 0.35);
+    margin: 2px 6px;
   }
 
   @media (max-width: 900px) {
@@ -511,38 +746,63 @@
     }
   }
 
-  /* СРАВНЕНИЕ */
-  .compare {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
+  /* СРАВНЕНИЕ — НАГЛЯДНАЯ ДОСКА МИНУС / ПЛЮС */
+  .compare-board {
     margin-top: 32px;
+    display: grid;
+    grid-template-columns: 1fr 48px 1fr;
+    gap: 0;
+    align-items: stretch;
   }
 
   .col {
     border-radius: 22px;
-    padding: 34px;
+    padding: 32px;
     position: relative;
     backdrop-filter: blur(12px);
-    box-shadow: 0 16px 40px -10px rgba(0,0,0,0.5);
   }
 
   .col.bad {
-    background: linear-gradient(170deg, rgba(255, 93, 108, 0.08) 0%, rgba(20, 12, 22, 0.75) 100%);
-    border: 1px solid var(--red-border);
+    background: linear-gradient(170deg, rgba(255, 93, 108, 0.04) 0%, rgba(18, 16, 26, 0.85) 100%);
+    border: 1px solid rgba(255, 93, 108, 0.24);
   }
 
   .col.good {
-    background: linear-gradient(170deg, rgba(52, 211, 153, 0.09) 0%, rgba(12, 24, 22, 0.75) 100%);
-    border: 1px solid var(--green-border);
-    box-shadow: 0 16px 45px -10px rgba(52, 211, 153, 0.15);
+    background: linear-gradient(170deg, rgba(124, 92, 255, 0.14) 0%, rgba(52, 211, 153, 0.07) 60%, rgba(16, 16, 36, 0.9) 100%);
+    border: 1px solid rgba(124, 92, 255, 0.5);
+    box-shadow: 0 20px 55px -12px rgba(124, 92, 255, 0.28);
+  }
+
+  .vs-divider {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .vs-badge {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--line-active);
+    color: var(--accent2);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(124, 92, 255, 0.25);
+    z-index: 2;
   }
 
   .col h4 {
-    font-size: 16px;
+    font-size: 15px;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    margin-bottom: 24px;
+    margin-bottom: 22px;
     font-weight: 800;
     display: flex;
     align-items: center;
@@ -562,6 +822,7 @@
     width: 8px;
     height: 8px;
     border-radius: 50%;
+    flex-shrink: 0;
   }
 
   .col.bad h4::before {
@@ -578,26 +839,39 @@
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 6px;
   }
 
   .col li {
-    padding: 11px 0;
+    padding: 12px 10px;
     font-size: 16px;
-    color: #cfcfdc;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     gap: 14px;
-    line-height: 1.45;
+    line-height: 1.4;
+    border-radius: 10px;
   }
 
   .col li:last-child {
     border-bottom: none;
   }
 
+  /* Левая колонка: тускло-серая с ощущением минусов */
+  .col.bad li {
+    color: #7e7e96;
+    background: rgba(255, 255, 255, 0.01);
+  }
+
+  .col.bad li span {
+    color: #9e9eb4;
+    font-weight: 600;
+    text-decoration: line-through;
+    text-decoration-color: rgba(255, 93, 108, 0.65);
+  }
+
   .col.bad li::before {
-    content: '✕';
+    content: '−';
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -605,11 +879,23 @@
     height: 22px;
     flex-shrink: 0;
     border-radius: 50%;
-    background: rgba(255, 93, 108, 0.15);
-    border: 1px solid rgba(255, 93, 108, 0.4);
+    background: rgba(255, 93, 108, 0.12);
+    border: 1px solid rgba(255, 93, 108, 0.35);
     color: var(--red);
-    font-size: 12px;
-    font-weight: 900;
+    font-size: 14px;
+    font-weight: 800;
+  }
+
+  /* Правая колонка: яркие фиолетовые/белые строки с зелёными галочками */
+  .col.good li {
+    color: #ebe7ff;
+    background: rgba(124, 92, 255, 0.06);
+    border-bottom-color: rgba(124, 92, 255, 0.14);
+  }
+
+  .col.good li span {
+    font-weight: 800;
+    color: #c4b5fd;
   }
 
   .col.good li::before {
@@ -622,24 +908,22 @@
     flex-shrink: 0;
     border-radius: 50%;
     background: rgba(52, 211, 153, 0.18);
-    border: 1px solid rgba(52, 211, 153, 0.45);
+    border: 1px solid rgba(52, 211, 153, 0.5);
     color: var(--green);
     font-size: 12px;
     font-weight: 900;
   }
 
-  .col li span {
-    font-weight: 700;
-    color: #ffffff;
-  }
-
-  @media (max-width: 768px) {
-    .compare {
+  @media (max-width: 840px) {
+    .compare-board {
       grid-template-columns: 1fr;
-      gap: 16px;
+      gap: 14px;
+    }
+    .vs-divider {
+      padding: 4px 0;
     }
     .col {
-      padding: 24px 20px;
+      padding: 24px 18px;
     }
   }
 
@@ -648,7 +932,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 18px;
-    margin-top: 32px;
+    margin-top: 28px;
   }
 
   .perk {
@@ -665,22 +949,22 @@
   }
 
   .perk .ico {
-    font-size: 26px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 48px;
-    height: 48px;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid var(--line);
+    width: 46px;
+    height: 46px;
+    background: rgba(124, 92, 255, 0.1);
+    border: 1px solid rgba(124, 92, 255, 0.28);
     border-radius: 12px;
     margin-bottom: 14px;
+    color: var(--accent2);
   }
 
   .perk b {
     display: block;
     font-size: 17px;
-    color: #ffffff;
+    color: var(--text-pure);
     margin-bottom: 6px;
     font-weight: 700;
   }
@@ -711,36 +995,52 @@
     border-radius: 20px;
     padding: 28px 24px;
     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    display: flex;
+    flex-direction: column;
   }
 
   .asset:hover {
-    transform: translateY(-4px);
+    transform: translateY(-5px);
     border-color: var(--accent2);
-    box-shadow: 0 12px 35px -8px rgba(124, 92, 255, 0.25);
+    box-shadow: 0 14px 38px -8px rgba(124, 92, 255, 0.32);
   }
 
   .asset .ico {
-    font-size: 28px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 52px;
-    height: 52px;
-    background: rgba(124, 92, 255, 0.12);
-    border: 1px solid rgba(124, 92, 255, 0.3);
+    width: 50px;
+    height: 50px;
+    background: rgba(124, 92, 255, 0.14);
+    border: 1px solid rgba(124, 92, 255, 0.35);
     border-radius: 14px;
-    margin-bottom: 16px;
+    margin-bottom: 18px;
+    color: var(--accent2);
+    box-shadow: 0 0 20px rgba(124, 92, 255, 0.15);
   }
 
   .asset b {
     display: block;
-    font-size: 18px;
-    color: #ffffff;
+    font-size: 19px;
+    color: var(--text-pure);
     margin-bottom: 8px;
-    font-weight: 700;
+    font-weight: 800;
   }
 
-  .asset span {
+  .asset .instead {
+    display: inline-block;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--accent2);
+    background: rgba(124, 92, 255, 0.12);
+    border: 1px solid rgba(124, 92, 255, 0.25);
+    padding: 3px 10px;
+    border-radius: 9999px;
+    margin-bottom: 10px;
+    width: fit-content;
+  }
+
+  .asset span.desc {
     font-size: 14.5px;
     color: var(--muted);
     line-height: 1.5;
@@ -758,125 +1058,410 @@
     }
   }
 
-  /* ВСТРЕЧИ (PROGRAM GRID) */
-  .grid {
+  /* НОВЫЙ БЛОК B: ДВА РЕЗУЛЬТАТА */
+  .two-results {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 22px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
     margin-top: 32px;
   }
 
-  .card {
+  .result-hero-card {
+    background: linear-gradient(160deg, rgba(18, 18, 38, 0.95), rgba(11, 11, 22, 0.98));
+    border: 1px solid rgba(124, 92, 255, 0.35);
+    border-radius: 24px;
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.65), 0 0 32px -10px rgba(124, 92, 255, 0.18);
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+
+  .result-hero-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent2);
+  }
+
+  .result-hero-card::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 180px;
+    height: 180px;
+    background: radial-gradient(circle, rgba(124, 92, 255, 0.18) 0%, transparent 70%);
+    filter: blur(30px);
+    pointer-events: none;
+  }
+
+  .result-hero-card .ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 54px;
+    border-radius: 15px;
+    background: rgba(124, 92, 255, 0.15);
+    border: 1px solid rgba(124, 92, 255, 0.38);
+    color: var(--accent2);
+    margin-bottom: 20px;
+  }
+
+  .result-hero-card h3 {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 12px;
+  }
+
+  .result-hero-card p {
+    color: #cfcfdc;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 768px) {
+    .two-results {
+      grid-template-columns: 1fr;
+    }
+    .result-hero-card {
+      padding: 28px 22px;
+    }
+  }
+
+  /* ПРОГРАММА 5 ВСТРЕЧ — ВЕРТИКАЛЬНЫЙ ТАЙМЛАЙН */
+  .timeline {
+    position: relative;
+    margin-top: 38px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding-left: 58px;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 21px;
+    top: 26px;
+    bottom: 26px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--accent) 0%, rgba(167, 139, 255, 0.5) 70%, rgba(212, 175, 106, 0.65) 100%);
+    box-shadow: 0 0 14px rgba(124, 92, 255, 0.4);
+  }
+
+  .timeline-step {
+    position: relative;
+  }
+
+  .timeline-node {
+    position: absolute;
+    left: -58px;
+    top: 24px;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #131328;
+    border: 2px solid var(--accent2);
+    color: var(--text-pure);
+    font-size: 13px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 18px rgba(124, 92, 255, 0.45);
+    z-index: 2;
+  }
+
+  .timeline-arrow {
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 20px;
+    margin: -6px 0;
+    color: var(--accent2);
+    opacity: 0.75;
+  }
+
+  .timeline-card {
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: 20px;
-    padding: 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    padding: 28px 30px;
     transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
   }
 
-  .card:hover {
-    transform: translateY(-3px);
+  .timeline-card:hover {
+    transform: translateX(4px);
     border-color: var(--line-active);
-    box-shadow: 0 12px 30px -8px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.6);
   }
 
-  .card .num {
+  .timeline-card .num {
     color: var(--accent2);
     font-weight: 800;
     font-size: 12px;
     letter-spacing: 1.5px;
     display: inline-block;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     background: rgba(124, 92, 255, 0.12);
-    border: 1px solid rgba(124, 92, 255, 0.25);
+    border: 1px solid rgba(124, 92, 255, 0.28);
     padding: 4px 12px;
     border-radius: 8px;
-    width: fit-content;
   }
 
-  .card p {
+  .timeline-card p {
     color: var(--muted);
     font-size: 15.5px;
-    margin-top: 8px;
+    margin-top: 6px;
     line-height: 1.55;
   }
 
-  .card .get {
+  .timeline-card .get {
     display: block;
-    margin-top: 20px;
+    margin-top: 16px;
     padding-top: 14px;
     border-top: 1px dashed rgba(255, 255, 255, 0.12);
-    color: var(--gold);
-    font-size: 14.5px;
+    color: var(--accent2);
+    font-size: 15px;
     font-weight: 600;
   }
 
-  @media (max-width: 768px) {
-    .grid {
-      grid-template-columns: 1fr;
+  /* БЛОК «НЕЙРОДАННЫЕ В ТВОЁМ КАБИНЕТЕ» — ВЫДЕЛЕН ЗОЛОТОМ */
+  .neuro-bonus {
+    margin-top: 28px;
+    background: linear-gradient(155deg, rgba(212, 175, 106, 0.12) 0%, rgba(20, 17, 28, 0.94) 55%, rgba(12, 11, 20, 0.98) 100%);
+    border: 1px solid rgba(212, 175, 106, 0.5);
+    border-radius: 22px;
+    padding: 34px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    box-shadow: 0 20px 55px -15px rgba(212, 175, 106, 0.22), inset 0 1px 0 rgba(212, 175, 106, 0.25);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .neuro-bonus::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(circle, rgba(212, 175, 106, 0.2) 0%, transparent 70%);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+
+  .neuro-icon {
+    width: 58px;
+    height: 58px;
+    flex-shrink: 0;
+    border-radius: 16px;
+    background: rgba(212, 175, 106, 0.14);
+    border: 1px solid rgba(212, 175, 106, 0.45);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 24px rgba(212, 175, 106, 0.25);
+  }
+
+  .neuro-bonus .num {
+    display: inline-block;
+    background: rgba(212, 175, 106, 0.16);
+    border: 1px solid rgba(212, 175, 106, 0.45);
+    color: var(--gold);
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 1.6px;
+    padding: 4px 12px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+
+  .neuro-bonus p {
+    color: #dedee8;
+    font-size: 16px;
+    margin-top: 6px;
+  }
+
+  .neuro-bonus .get {
+    display: block;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(212, 175, 106, 0.28);
+    color: var(--gold);
+    font-size: 15.5px;
+    font-weight: 700;
+  }
+
+  @media (max-width: 640px) {
+    .timeline {
+      padding-left: 42px;
+      gap: 14px;
     }
-    .card {
-      padding: 24px;
+    .timeline::before {
+      left: 14px;
+    }
+    .timeline-node {
+      left: -42px;
+      top: 22px;
+      width: 30px;
+      height: 30px;
+      font-size: 11px;
+    }
+    .timeline-arrow {
+      padding-left: 16px;
+    }
+    .timeline-card {
+      padding: 22px 18px;
+    }
+    .neuro-bonus {
+      flex-direction: column;
+      padding: 24px 20px;
+      gap: 16px;
     }
   }
 
-  /* СПИСОК «КОМУ ПОДОЙДЕТ» */
-  .list {
-    margin-top: 24px;
-    display: flex;
-    flex-direction: column;
+  /* НОВЫЙ БЛОК C: КТО ЭТО УЖЕ ДЕЛАЕТ */
+  .proof-box {
+    background: linear-gradient(160deg, rgba(18, 18, 36, 0.8), rgba(12, 12, 24, 0.9));
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 44px;
+  }
+
+  .proof-lead {
+    color: #cfcfdc;
+    font-size: clamp(16px, 2vw, 18.5px);
+    max-width: 780px;
+    line-height: 1.6;
+  }
+
+  .proof-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-top: 32px;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid rgba(124, 92, 255, 0.28);
+    border-radius: 18px;
+    padding: 26px 22px;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+
+  .stat-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent2);
+  }
+
+  .stat-val {
+    font-size: clamp(28px, 3.2vw, 38px);
+    font-weight: 800;
+    color: var(--accent2);
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+
+  .stat-desc {
+    font-size: 14.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    .proof-box {
+      padding: 28px 18px;
+    }
+    .proof-stats {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* КОМУ ПОДОЙДЁТ — КАРТОЧКИ С ИКОНКАМИ */
+  .audience-grid {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 14px;
   }
 
-  .list li {
-    list-style: none;
-    padding: 16px 20px 16px 46px;
-    position: relative;
+  .audience-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 20px 24px;
     background: var(--card);
     border: 1px solid var(--line);
-    border-radius: 14px;
+    border-radius: 16px;
     color: #cfcfdc;
     font-size: 16.5px;
     line-height: 1.5;
     transition: transform 0.2s ease, border-color 0.2s ease;
   }
 
-  .list li:hover {
+  .audience-card:hover {
     transform: translateX(4px);
     border-color: var(--line-active);
   }
 
-  .list li:before {
-    content: "◆";
-    position: absolute;
-    left: 20px;
+  .audience-card .ico {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 12px;
+    background: rgba(124, 92, 255, 0.12);
+    border: 1px solid rgba(124, 92, 255, 0.3);
     color: var(--accent2);
-    font-size: 14px;
-    top: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
-  .list li b {
-    color: #ffffff;
+  .audience-card b {
+    color: var(--text-pure);
     font-weight: 700;
   }
 
-  /* ЦЕНА (PRICE SECTION) */
+  @media (max-width: 600px) {
+    .audience-card {
+      padding: 16px;
+      gap: 14px;
+      font-size: 15.5px;
+      align-items: flex-start;
+    }
+  }
+
+  /* ЦЕНА + НОВЫЙ БЛОК D (РАЗБОР) */
+  .join-grid {
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 24px;
+    margin-top: 28px;
+    align-items: stretch;
+  }
+
   .pricewrap {
-    background: linear-gradient(170deg, #15152a 0%, #0d0d1a 100%);
+    background: linear-gradient(170deg, #16162e 0%, #0d0d1a 100%);
     border: 1px solid var(--line-active);
     border-radius: 26px;
-    padding: 48px;
-    margin-top: 28px;
-    box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.7), 0 0 30px -5px rgba(124, 92, 255, 0.15);
+    padding: 42px;
+    box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.7), 0 0 32px -6px rgba(124, 92, 255, 0.18);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 
   .price {
-    font-size: clamp(40px, 6vw, 64px);
+    font-size: clamp(42px, 5.5vw, 62px);
     font-weight: 800;
-    color: #ffffff;
+    background: linear-gradient(135deg, #ffffff 20%, #f3d9a4 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     letter-spacing: -1.5px;
     display: flex;
     align-items: baseline;
@@ -885,24 +1470,26 @@
   }
 
   .price small {
-    font-size: clamp(16px, 2.2vw, 20px);
+    font-size: clamp(16px, 2vw, 20px);
+    -webkit-text-fill-color: var(--muted);
     color: var(--muted);
     font-weight: 400;
     letter-spacing: 0;
   }
 
   .rows {
-    margin-top: 30px;
+    margin-top: 26px;
   }
 
   .row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 18px 0;
+    padding: 16px 0;
     border-bottom: 1px solid var(--line);
-    font-size: 16.5px;
+    font-size: 16px;
     color: #cfcfdc;
+    gap: 12px;
   }
 
   .row:last-child {
@@ -911,7 +1498,7 @@
 
   .row .v {
     font-weight: 700;
-    color: #ffffff;
+    color: var(--text-pure);
     text-align: right;
   }
 
@@ -920,13 +1507,13 @@
   }
 
   .notice {
-    margin-top: 30px;
+    margin-top: 24px;
     background: rgba(212, 175, 106, 0.08);
-    border: 1px solid rgba(212, 175, 106, 0.32);
+    border: 1px solid rgba(212, 175, 106, 0.34);
     border-left: 4px solid var(--gold);
     border-radius: 14px;
-    padding: 24px;
-    font-size: 15.5px;
+    padding: 20px;
+    font-size: 15px;
     color: #dedee8;
     line-height: 1.55;
   }
@@ -936,22 +1523,52 @@
     font-weight: 700;
   }
 
+  .consult-card {
+    background: linear-gradient(170deg, rgba(212, 175, 106, 0.07) 0%, rgba(18, 18, 36, 0.95) 60%, #0d0d1a 100%);
+    border: 1px solid rgba(212, 175, 106, 0.35);
+    border-radius: 26px;
+    padding: 40px 34px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 20px 55px -15px rgba(0, 0, 0, 0.65);
+  }
+
+  .consult-card h3 {
+    font-size: clamp(22px, 2.5vw, 27px);
+    line-height: 1.25;
+    margin-bottom: 16px;
+  }
+
+  .consult-card p.lead {
+    color: #cfcfdc;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 920px) {
+    .join-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
   @media (max-width: 640px) {
-    .pricewrap {
+    .pricewrap,
+    .consult-card {
       padding: 28px 20px;
       border-radius: 20px;
     }
     .row {
       flex-direction: column;
       align-items: flex-start;
-      gap: 6px;
-      padding: 14px 0;
+      gap: 4px;
+      padding: 13px 0;
     }
     .row .v {
       text-align: left;
     }
     .notice {
-      padding: 18px;
+      padding: 16px;
     }
   }
 
@@ -962,7 +1579,80 @@
     color: var(--muted);
     font-size: 14px;
     text-align: center;
-    line-height: 1.6;
+    line-height: 1.7;
+  }
+
+  .footer-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    color: var(--text-pure);
+    margin-bottom: 12px;
+  }
+
+  .footer-logo span {
+    color: var(--accent2);
+  }
+
+  .footer-author {
+    margin-top: 8px;
+    font-size: 13.5px;
+    color: #7d7d96;
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* VIDEO MODAL */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 6, 12, 0.84);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-backdrop.open {
+    display: flex;
+  }
+
+  .modal-box {
+    background: var(--bg2);
+    border: 1px solid var(--line-active);
+    border-radius: 22px;
+    max-width: 560px;
+    width: 100%;
+    padding: 32px;
+    position: relative;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.8), 0 0 40px rgba(124, 92, 255, 0.22);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-close:hover {
+    background: rgba(255, 255, 255, 0.14);
   }
 
   /* МИКРОАНИМАЦИИ ПРИ СКРОЛЛЕ */
@@ -978,7 +1668,6 @@
     transform: translateY(0);
   }
 
-  /* Stagger для карточек */
   .stagger-group .stagger-item {
     opacity: 0;
     transform: translateY(20px);
@@ -998,11 +1687,57 @@
     .btn,
     .shock .p,
     .asset,
-    .card,
-    .perk {
+    .timeline-card,
+    .perk,
+    .video-player-btn {
       transition: none !important;
       opacity: 1 !important;
       transform: none !important;
+    }
+  }
+
+  /* ПЕЧАТЬ */
+  @media print {
+    body {
+      background: #ffffff !important;
+      color: #111111 !important;
+      background-image: none !important;
+    }
+    .grid-backdrop,
+    .hero-glow,
+    .hero-photo,
+    .modal-backdrop,
+    .play-orb {
+      display: none !important;
+    }
+    .reveal,
+    .stagger-group .stagger-item {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    section {
+      padding: 28px 0 !important;
+      break-inside: avoid;
+    }
+    h1, h2, h3, h4, b, .logo, .price {
+      color: #111111 !important;
+      -webkit-text-fill-color: #111111 !important;
+      text-shadow: none !important;
+    }
+    .shock, .col, .asset, .timeline-card, .neuro-bonus, .pricewrap, .consult-card, .proof-box, .video-showcase, .audience-card, .perk, .stat-card {
+      background: #ffffff !important;
+      border: 1px solid #cccccc !important;
+      box-shadow: none !important;
+      color: #222222 !important;
+    }
+    p, li, span, .muted {
+      color: #333333 !important;
+    }
+    .btn {
+      border: 1px solid #333333 !important;
+      background: #eeeeee !important;
+      color: #111111 !important;
+      box-shadow: none !important;
     }
   }
 </style>
@@ -1026,13 +1761,44 @@
 <div class="wrap">
   <section class="hero-section">
     <div class="hero-glow" aria-hidden="true"></div>
-    <div class="reveal">
+    <div class="hero-content reveal">
       <span class="eyebrow">Мастермайнд для практиков и экспертов</span>
       <h1 style="margin-top:24px">Твоя <em>AI-команда</em><br>за 2 месяца</h1>
       <p class="sub">Она соберёт тебе <b>сайт, соцсети и материалы для клиентов</b> —
          вместо отдела маркетинга на полмиллиона.</p>
-      <div style="margin-top:8px">
-        <a class="btn" href="#compare">Посмотреть, как это работает</a>
+      <div class="hero-actions">
+        <a class="btn" href="https://t.me/Indigopeople_assistant">Записаться</a>
+        <a class="btn ghost" href="#video">Посмотреть, как это работает</a>
+      </div>
+    </div>
+    <div class="hero-photo" aria-hidden="true">
+      <img src="img/m1.jpg" alt="" loading="eager">
+    </div>
+  </section>
+</div>
+
+<!-- НОВЫЙ БЛОК A: ПОСМОТРИ, КАК ЭТО РАБОТАЕТ -->
+<div class="wrap">
+  <section id="video" class="video-section">
+    <div class="video-showcase reveal">
+      <div class="video-copy">
+        <h2>Сначала — посмотри, как это работает</h2>
+        <p>Я записал видео на 54 минуты: показал свою AI-команду вживую — сайты, тесты, транскрипцию, визуал с моим лицом, книгу, диссертацию, CRM. Не теория. Всё, что я делаю, на моём железе.</p>
+        <div style="margin-top:26px">
+          <button type="button" class="btn full-mobile" data-open-video>Смотреть видео</button>
+        </div>
+        <p class="video-note">Видео бесплатное. В конце — кодовое слово и подарок: стартовый набор нейросетей с промтами и контактами проверенных продавцов.</p>
+      </div>
+      <div>
+        <button type="button" class="video-player-btn" data-open-video aria-label="Смотреть видео продолжительностью 54 минуты">
+          <img src="img/h2.jpg" alt="Демонстрация AI-команды на практике: сайты, тесты, визуал и CRM" loading="lazy">
+          <span class="play-orb" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="white" aria-hidden="true">
+              <polygon points="6 4 20 12 6 20 6 4"></polygon>
+            </svg>
+          </span>
+          <span class="video-duration">54:00</span>
+        </button>
       </div>
     </div>
   </section>
@@ -1040,34 +1806,34 @@
 
 <!-- СКОЛЬКО СТОИТ КОМАНДА ВЖИВУЮ -->
 <div class="wrap">
-  <section style="padding-top:0">
-    <div class="shock reveal">
+  <section style="padding-top:16px">
+    <div class="shock reveal" id="shock-block">
       <div class="stitle">Сколько стоит такая команда, если нанимать живых людей</div>
       <div class="prices stagger-group">
         <div class="p stagger-item" style="--delay:1">
           <div class="role">Маркетолог</div>
-          <div class="cost">150 000</div>
+          <div class="cost"><span class="counter" data-target="150000">150 000</span></div>
           <div class="mo">₽ / мес</div>
         </div>
         <div class="p stagger-item" style="--delay:2">
           <div class="role">Дизайнер</div>
-          <div class="cost">100 000</div>
+          <div class="cost"><span class="counter" data-target="100000">100 000</span></div>
           <div class="mo">₽ / мес</div>
         </div>
         <div class="p stagger-item" style="--delay:3">
           <div class="role">Копирайтер</div>
-          <div class="cost">80 000</div>
+          <div class="cost"><span class="counter" data-target="80000">80 000</span></div>
           <div class="mo">₽ / мес</div>
         </div>
         <div class="p stagger-item" style="--delay:4">
           <div class="role">Разработчик</div>
-          <div class="cost">200 000</div>
+          <div class="cost"><span class="counter" data-target="200000">200 000</span></div>
           <div class="mo">₽ / мес</div>
         </div>
         <div class="p stagger-item" style="--delay:5">
           <div class="role">Фотограф</div>
           <div class="cost">по съёмкам</div>
-          <div class="mo">от 15 000</div>
+          <div class="mo">от <span class="counter" data-target="15000">15 000</span></div>
         </div>
       </div>
       <div class="total">Итого <b>≈ 500 000 ₽ в месяц</b> — штат, который большинство практиков не может себе позволить.</div>
@@ -1081,7 +1847,7 @@
     <div class="reveal">
       <h2>Та же команда — у тебя<br>за стоимость подписки</h2>
     </div>
-    <div class="compare stagger-group">
+    <div class="compare-board stagger-group">
       <div class="col bad stagger-item" style="--delay:1">
         <h4>Живая команда</h4>
         <ul>
@@ -1094,6 +1860,9 @@
           <li>Делает по ТЗ — <span>с ошибками</span></li>
           <li>Может <span>уволиться</span> в разгар проекта</li>
         </ul>
+      </div>
+      <div class="vs-divider" aria-hidden="true">
+        <div class="vs-badge">VS</div>
       </div>
       <div class="col good stagger-item" style="--delay:2">
         <h4>Твоя AI-команда</h4>
@@ -1109,19 +1878,25 @@
         </ul>
       </div>
     </div>
-    <div class="perks stagger-group" style="margin-top:28px">
+    <div class="perks stagger-group">
       <div class="perk stagger-item" style="--delay:1">
-        <span class="ico">💸</span>
+        <span class="ico" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15 9.5c-.5-1-1.5-1.5-3-1.5-2 0-3 1-3 2.2 0 1.4 1.2 2 3 2.3 1.8.3 3 .9 3 2.3 0 1.3-1.2 2.2-3 2.2-1.6 0-2.7-.6-3.2-1.6"/><path d="M12 6v12"/></svg>
+        </span>
         <b>В 100 раз дешевле</b>
         <span>Платишь за инструменты, а не за чужие зарплаты и больничные.</span>
       </div>
       <div class="perk stagger-item" style="--delay:2">
-        <span class="ico">⏰</span>
+        <span class="ico" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15.5 14"/></svg>
+        </span>
         <b>Круглосуточно</b>
         <span>Не спит, не уходит в отпуск, не пропадает в пятницу вечером.</span>
       </div>
       <div class="perk stagger-item" style="--delay:3">
-        <span class="ico">🙋</span>
+        <span class="ico" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </span>
         <b>Только твоя</b>
         <span>У неё нет других клиентов. Весь фокус — на тебе и твоей практике.</span>
       </div>
@@ -1138,136 +1913,271 @@
     </div>
     <div class="assets stagger-group">
       <div class="asset stagger-item" style="--delay:1">
-        <span class="ico">🌐</span>
+        <span class="ico" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </span>
         <b>Сайт, который продаёт</b>
-        <span>Вместо разработчика. Собран под твою услугу — за вечер, а не за месяц ожидания.</span>
+        <span class="instead">Вместо разработчика.</span>
+        <span class="desc">Собран под твою услугу — за вечер, а не за месяц ожидания.</span>
       </div>
       <div class="asset stagger-item" style="--delay:2">
-        <span class="ico">✍️</span>
+        <span class="ico" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+        </span>
         <b>Контент, который приводит</b>
-        <span>Вместо копирайтера. Посты и сообщения в твоём голосе.</span>
+        <span class="instead">Вместо копирайтера.</span>
+        <span class="desc">Посты и сообщения в твоём голосе.</span>
       </div>
       <div class="asset stagger-item" style="--delay:3">
-        <span class="ico">🎨</span>
+        <span class="ico" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        </span>
         <b>Обложки и визуал</b>
-        <span>Вместо дизайнера. Рилсы, YouTube, презентации — с твоим лицом и стилем.</span>
+        <span class="instead">Вместо дизайнера.</span>
+        <span class="desc">Рилсы, YouTube, презентации — с твоим лицом и стилем.</span>
       </div>
       <div class="asset stagger-item" style="--delay:4">
-        <span class="ico">📸</span>
+        <span class="ico" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </span>
         <b>Фото для контента</b>
-        <span>Вместо фотографа и фотосессии. Узнаваемые кадры за минуты.</span>
+        <span class="instead">Вместо фотографа и фотосессии.</span>
+        <span class="desc">Узнаваемые кадры за минуты.</span>
       </div>
       <div class="asset stagger-item" style="--delay:5">
-        <span class="ico">📊</span>
+        <span class="ico" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+        </span>
         <b>Тесты и квизы</b>
-        <span>Воронка и диагностика клиента — твой инструмент, а не чужая платформа.</span>
+        <span class="desc">Воронка и диагностика клиента — твой инструмент, а не чужая платформа.</span>
       </div>
       <div class="asset stagger-item" style="--delay:6">
-        <span class="ico">🤖</span>
+        <span class="ico" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></svg>
+        </span>
         <b>Ассистент для рутины</b>
-        <span>Документы, саммари сессий, разбор встреч. Часы уходят из твоей недели.</span>
+        <span class="desc">Документы, саммари сессий, разбор встреч. Часы уходят из твоей недели.</span>
       </div>
     </div>
   </section>
 </div>
 
-<!-- ПО ВСТРЕЧАМ -->
+<!-- НОВЫЙ БЛОК B: ДВА РЕЗУЛЬТАТА -->
+<div class="wrap">
+  <section>
+    <div class="reveal">
+      <h2>Два результата, ради которых всё это</h2>
+    </div>
+    <div class="two-results stagger-group">
+      <div class="result-hero-card stagger-item" style="--delay:1">
+        <span class="ico" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </span>
+        <h3>Сайт</h3>
+        <p>Твой. В твоём стиле. Собраный под твою услугу, с твоими текстами и фото. Доверие к тебе возникает, когда человек видит твои страницы — а не когда приходит на сессию.</p>
+      </div>
+      <div class="result-hero-card stagger-item" style="--delay:2">
+        <span class="ico" aria-hidden="true">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v4a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        </span>
+        <h3>Ассистент с руками</h3>
+        <p>Не чат-бот, а программа с файлами, почтой, календарём, CRM и Telegram. Саммари сессий, транскрибация, документы, контент. Он помнит контекст и развивается по ходу работы.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ПО ВСТРЕЧАМ (ВЕРТИКАЛЬНЫЙ ТАЙМЛАЙН) + ЗОЛОТОЙ БОНУС -->
 <div class="wrap">
   <section id="program">
     <div class="reveal">
       <h2>Как собирается твоя команда</h2>
     </div>
-    <div class="grid stagger-group">
-      <div class="card stagger-item" style="--delay:1">
-        <div>
+
+    <div class="timeline stagger-group">
+      <div class="timeline-step stagger-item" style="--delay:1">
+        <div class="timeline-node">01</div>
+        <div class="timeline-card">
           <span class="num">ВСТРЕЧА 01</span>
           <h3>Копирайтер: тексты в твоём голосе</h3>
           <p>Публицистика для блога, разговорный стиль для сообщений. Промпты под твою интонацию.</p>
+          <span class="get">→ Посты, которые не отличить от твоих</span>
         </div>
-        <span class="get">→ Посты, которые не отличить от твоих</span>
       </div>
-      <div class="card stagger-item" style="--delay:2">
-        <div>
+      <div class="timeline-arrow" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+      </div>
+
+      <div class="timeline-step stagger-item" style="--delay:2">
+        <div class="timeline-node">02</div>
+        <div class="timeline-card">
           <span class="num">ВСТРЕЧА 02</span>
           <h3>Дизайнер и фотограф: визуал под тебя</h3>
           <p>Фото со своим лицом, обложки рилсов, YouTube, книг и презентаций. Авторское право.</p>
+          <span class="get">→ Узнаваемый визуал без фотосессий</span>
         </div>
-        <span class="get">→ Узнаваемый визуал без фотосессий</span>
       </div>
-      <div class="card stagger-item" style="--delay:3">
-        <div>
+      <div class="timeline-arrow" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+      </div>
+
+      <div class="timeline-step stagger-item" style="--delay:3">
+        <div class="timeline-node">03</div>
+        <div class="timeline-card">
           <span class="num">ВСТРЕЧА 03</span>
           <h3>Разработчик: сайт без кода</h3>
           <p>Сайт или лендинг под твою услугу, тесты и квизы для клиентов, боты.</p>
+          <span class="get">→ Сайт, тест и бот — без подрядчиков</span>
         </div>
-        <span class="get">→ Сайт, тест и бот — без подрядчиков</span>
       </div>
-      <div class="card stagger-item" style="--delay:4">
-        <div>
+      <div class="timeline-arrow" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+      </div>
+
+      <div class="timeline-step stagger-item" style="--delay:4">
+        <div class="timeline-node">04</div>
+        <div class="timeline-card">
           <span class="num">ВСТРЕЧА 04</span>
           <h3>Ассистент: рутина на автомате</h3>
           <p>Транскрибация и саммаризацию сессий и встреч, работа с документами и заметками.</p>
+          <span class="get">→ Часы рутины уходят из недели</span>
         </div>
-        <span class="get">→ Часы рутины уходят из недели</span>
       </div>
-      <div class="card stagger-item" style="--delay:5">
-        <div>
+      <div class="timeline-arrow" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+      </div>
+
+      <div class="timeline-step stagger-item" style="--delay:5">
+        <div class="timeline-node">05</div>
+        <div class="timeline-card">
           <span class="num">ВСТРЕЧА 05</span>
           <h3>Маркетолог: система приводит клиентов</h3>
           <p>Контент-план → рилс → посты → воронка. Как продолжать делать новое самому.</p>
+          <span class="get">→ Рабочая система, а не разрозненные навыки</span>
         </div>
-        <span class="get">→ Рабочая система, а не разрозненные навыки</span>
       </div>
-      <div class="card stagger-item" style="--delay:6;border-color:rgba(124,92,255,.45)">
-        <div>
-          <span class="num" style="background:rgba(212,175,106,.15);border-color:rgba(212,175,106,.4);color:var(--gold)">БОНУС</span>
-          <h3>Нейроданные в твоём кабинете</h3>
-          <p>Как ЭЭГ-датчики повышают чек и наглядность результатов. Дадим попробовать.</p>
-        </div>
+    </div>
+
+    <!-- ЗОЛОТОЙ БЛОК НЕЙРОДАННЫХ -->
+    <div class="neuro-bonus reveal">
+      <div class="neuro-icon" aria-hidden="true">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="2 12 6 12 9 4 13 20 16 12 22 12"/>
+        </svg>
+      </div>
+      <div style="flex:1">
+        <span class="num">БОНУС</span>
+        <h3>Нейроданные в твоём кабинете</h3>
+        <p>Как ЭЭГ-датчики повышают чек и наглядность результатов. Дадим попробовать.</p>
         <span class="get">→ Аргумент для повышения чека</span>
       </div>
     </div>
   </section>
 </div>
 
-<!-- КОМУ -->
+<!-- НОВЫЙ БЛОК C: ЭТО НЕ МАГИЯ И НЕ БУДУЩЕЕ -->
+<div class="wrap">
+  <section>
+    <div class="proof-box reveal">
+      <h2>Это не магия и не «будущее». Это уже работает.</h2>
+      <p class="proof-lead">Я не программист и не айтишник. Всё, что ты увидишь, сделано в одиночку — без нанятых людей. И да, нейросети умели это делать полгода назад. Через полгода будет уметь ещё больше.</p>
+      <div class="proof-stats stagger-group">
+        <div class="stat-card stagger-item" style="--delay:1">
+          <div class="stat-val">5 часов</div>
+          <div class="stat-desc">Чистого времени на сайт, который делала команда за полтора месяца</div>
+        </div>
+        <div class="stat-card stagger-item" style="--delay:2">
+          <div class="stat-val">1,5 часа</div>
+          <div class="stat-desc">На вишлист — список всех своих хотелок в одном месте</div>
+        </div>
+        <div class="stat-card stagger-item" style="--delay:3">
+          <div class="stat-val">1 сообщение</div>
+          <div class="stat-desc">Столько нужно, чтобы получить готовый результат</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- КОМУ ПОДОЙДЁТ -->
 <div class="wrap">
   <section>
     <div class="reveal">
       <h2>Кому подойдёт</h2>
     </div>
-    <ul class="list stagger-group">
-      <li class="stagger-item" style="--delay:1"><b>Психологам и коучам</b> — тем, кто практикует и хочет расти без выгорания</li>
-      <li class="stagger-item" style="--delay:2">Бизнес-консультантам и тренерам по продажам — кому нужна упаковка и контент</li>
-      <li class="stagger-item" style="--delay:3">Экспертам и наставникам, которые продают знания</li>
-      <li class="stagger-item" style="--delay:4">Предпринимателям и фрилансерам, кто сам себе маркетинг и отдел разработки</li>
-      <li class="stagger-item" style="--delay:5">Всем, кто устал делать контент, сайт и документы руками</li>
-    </ul>
+    <div class="audience-grid stagger-group">
+      <div class="audience-card stagger-item" style="--delay:1">
+        <span class="ico" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a7 7 0 0 1 7 7c0 2.8-1.5 5-3.5 6.5V18a2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2v-2.5C6.5 14 5 11.8 5 9a7 7 0 0 1 7-7z"/><line x1="9" y1="22" x2="15" y2="22"/></svg>
+        </span>
+        <span><b>Психологам и коучам</b> — тем, кто практикует и хочет расти без выгорания</span>
+      </div>
+      <div class="audience-card stagger-item" style="--delay:2">
+        <span class="ico" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </span>
+        <span>Бизнес-консультантам и тренерам по продажам — кому нужна упаковка и контент</span>
+      </div>
+      <div class="audience-card stagger-item" style="--delay:3">
+        <span class="ico" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+        </span>
+        <span>Экспертам и наставникам, которые продают знания</span>
+      </div>
+      <div class="audience-card stagger-item" style="--delay:4">
+        <span class="ico" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+        </span>
+        <span>Предпринимателям и фрилансерам, кто сам себе маркетинг и отдел разработки</span>
+      </div>
+      <div class="audience-card stagger-item" style="--delay:5">
+        <span class="ico" aria-hidden="true">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </span>
+        <span>Всем, кто устал делать контент, сайт и документы руками</span>
+      </div>
+    </div>
   </section>
 </div>
 
-<!-- ЦЕНА -->
+<!-- ЦЕНА + НОВЫЙ БЛОК D -->
 <div class="wrap">
   <section id="join">
     <div class="reveal">
       <h2>Стоимость участия</h2>
     </div>
-    <div class="pricewrap reveal">
-      <div class="price">35 000 ₽ <small>/ 2 месяца</small></div>
-      <div class="rows">
-        <div class="row"><span>Формат</span><span class="v">5 живых онлайн-встреч + записи</span></div>
-        <div class="row"><span>Результат</span><span class="v">упакованный сайт, соцсети и материалы</span></div>
-        <div class="row"><span>Старт</span><span class="v">по набору группы</span></div>
+    <div class="join-grid">
+      <div class="pricewrap reveal">
+        <div>
+          <div class="price">35 000 ₽ <small>/ 2 месяца</small></div>
+          <div class="rows">
+            <div class="row"><span>Формат</span><span class="v">5 живых онлайн-встреч + записи</span></div>
+            <div class="row"><span>Результат</span><span class="v">упакованный сайт, соцсети и материалы</span></div>
+            <div class="row"><span>Старт</span><span class="v">по набору группы</span></div>
+          </div>
+          <div class="notice">
+            <b>Что нужно, кроме участия.</b> Чтобы войти в игру, понадобится стартовая сумма на
+            подписки нейросетей и токены — <b>около 5 000 ₽</b> на первые шаги. Дальше расходы зависят
+            от твоих задач. Платишь напрямую сервисам, а не нам за накрутку.
+          </div>
+        </div>
+        <div style="margin-top:28px">
+          <a class="btn full-mobile" href="https://t.me/Indigopeople_assistant">Записаться</a>
+          <p class="muted" style="margin-top:14px;font-size:14.5px">Оставь контакт — расскажем, что именно у тебя появится за 2 месяца.</p>
+        </div>
       </div>
-      <div class="notice">
-        <b>Что нужно, кроме участия.</b> Чтобы войти в игру, понадобится стартовая сумма на
-        подписки нейросетей и токены — <b>около 5 000 ₽</b> на первые шаги. Дальше расходы зависят
-        от твоих задач. Платишь напрямую сервисам, а не нам за накрутку.
+
+      <!-- НОВЫЙ БЛОК D: ЗАПИСАТЬСЯ НА РАЗБОР -->
+      <div class="consult-card reveal">
+        <div>
+          <h3>Не покупай вслепую. Сначала — разберём, что это даст тебе</h3>
+          <p class="lead">Созвон со мной: посмотрим, что конкретно нейросети могут дать твоей практике, с чего начать и за сколько встреч окупится. Если не подойдёт — так и скажу.</p>
+        </div>
+        <div style="margin-top:28px">
+          <a class="btn gold full-mobile" href="https://t.me/Indigopeople_assistant">Записаться на разбор</a>
+          <p class="muted" style="margin-top:14px;font-size:14.5px">Без продажи в лоб. Сначала разбираем твою задачу.</p>
+        </div>
       </div>
-      <div>
-        <a class="btn" href="https://t.me/Andrey_Indigo">Записаться</a>
-      </div>
-      <p class="muted" style="margin-top:16px;font-size:14.5px">Оставь контакт — расскажем, что именно у тебя появится за 2 месяца.</p>
     </div>
   </section>
 </div>
@@ -1275,38 +2185,114 @@
 <!-- FOOTER -->
 <div class="wrap">
   <footer class="footer">
-    Indigo Lab · Доказательная психология · Метод БПСП — AI-инструменты для помогающих практиков.
+    <div class="footer-logo">
+      <span class="logo-dot" aria-hidden="true"></span>
+      INDIGO <span>LAB</span>
+    </div>
+    <div>Indigo Lab · Доказательная психология · Метод БПСП · AI-инструменты для помогающих практиков</div>
+    <div class="footer-author">Антон Шумкин — психолог-гипнотерапевт, 12+ лет в маркетинге и бизнесе, автор книги «Терапия оргазмом», кандидатская диссертация по нейродатчикам</div>
   </footer>
 </div>
 
-<!-- IntersectionObserver для деликатных микроанимаций при скролле -->
+<!-- МОДАЛЬНОЕ ОКНО ДЛЯ ПРОСМОТРА 54-МИНУТНОГО ВИДЕО -->
+<div class="modal-backdrop" id="video-modal" role="dialog" aria-modal="true" aria-labelledby="video-modal-title">
+  <div class="modal-box">
+    <button type="button" class="modal-close" id="video-modal-close" aria-label="Закрыть окно">✕</button>
+    <span class="eyebrow" style="margin-bottom:14px">Видео · 54 минуты</span>
+    <h3 id="video-modal-title" style="font-size:22px;margin-bottom:12px">Сначала — посмотри, как это работает</h3>
+    <p style="color:#cfcfdc;font-size:15.5px;line-height:1.6">
+      Я записал видео на 54 минуты: показал свою AI-команду вживую — сайты, тесты, транскрипцию, визуал с моим лицом, книгу, диссертацию, CRM. Не теория. Всё, что я делаю, на моём железе.
+    </p>
+    <p class="video-note" style="margin-top:14px">
+      Видео бесплатное. В конце — кодовое слово и подарок: стартовый набор нейросетей с промтами и контактами проверенных продавцов.
+    </p>
+    <div style="margin-top:24px">
+      <a class="btn" style="width:100%" href="https://t.me/Indigopeople_assistant" target="_blank" rel="noopener noreferrer">Открыть видео в Telegram</a>
+    </div>
+  </div>
+</div>
+
 <script>
   (function() {
+    var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function formatNumber(n) {
+      return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    }
+
+    function animateCounter(el) {
+      if (el.dataset.animated === '1') return;
+      el.dataset.animated = '1';
+      var target = parseInt(el.getAttribute('data-target'), 10);
+      if (isNaN(target)) return;
+      if (prefersReduced) {
+        el.textContent = formatNumber(target);
+        return;
+      }
+      var duration = 1100;
+      var startTime = null;
+      function step(ts) {
+        if (!startTime) startTime = ts;
+        var elapsed = ts - startTime;
+        var progress = Math.min(elapsed / duration, 1);
+        var eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+        el.textContent = formatNumber(target * eased);
+        if (progress < 1) {
+          requestAnimationFrame(step);
+        } else {
+          el.textContent = formatNumber(target);
+        }
+      }
+      el.textContent = '0';
+      requestAnimationFrame(step);
+    }
+
     if (!('IntersectionObserver' in window)) {
       document.querySelectorAll('.reveal, .stagger-group').forEach(function(el) {
         el.classList.add('is-visible');
       });
-      return;
+      document.querySelectorAll('.counter[data-target]').forEach(animateCounter);
+    } else {
+      var observer = new IntersectionObserver(function(entries, obs) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            if (entry.target.id === 'shock-block') {
+              entry.target.querySelectorAll('.counter[data-target]').forEach(animateCounter);
+            }
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { root: null, rootMargin: '0px 0px -40px 0px', threshold: 0.1 });
+
+      document.querySelectorAll('.reveal, .stagger-group').forEach(function(el) {
+        observer.observe(el);
+      });
     }
 
-    var observerOptions = {
-      root: null,
-      rootMargin: '0px 0px -40px 0px',
-      threshold: 0.12
-    };
-
-    var observer = new IntersectionObserver(function(entries, obs) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          obs.unobserve(entry.target);
+    var modal = document.getElementById('video-modal');
+    var closeBtn = document.getElementById('video-modal-close');
+    document.querySelectorAll('[data-open-video]').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        modal.classList.add('open');
+        closeBtn.focus();
+      });
+    });
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function() {
+        modal.classList.remove('open');
+      });
+    }
+    if (modal) {
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) modal.classList.remove('open');
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.classList.contains('open')) {
+          modal.classList.remove('open');
         }
       });
-    }, observerOptions);
-
-    document.querySelectorAll('.reveal, .stagger-group').forEach(function(el) {
-      observer.observe(el);
-    });
+    }
   })();
 </script>
 

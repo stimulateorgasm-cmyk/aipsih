@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Анкета — Indigo Lab</title>
+<meta name="description" content="Чтобы получить видео и подарок — заполни короткую анкету. 7 вопросов, 2 минуты.">
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+  :root {
+    --bg: #0a0a12;
+    --bg2: #0f0f1c;
+    --card: #121224;
+    --card-hover: #161630;
+    --line: rgba(255, 255, 255, 0.08);
+    --line-active: rgba(124, 92, 255, 0.35);
+    --text: #e8e8f0;
+    --text-pure: #ffffff;
+    --muted: #9a9ab0;
+    --accent: #7c5cff;
+    --accent2: #a78bff;
+    --accent-glow: rgba(124, 92, 255, 0.3);
+    --gold: #d4af6a;
+    --gold-glow: rgba(212, 175, 106, 0.2);
+    --green: #34d399;
+    --red: #ff5d6c;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    background: var(--bg);
+    height: 100%;
+  }
+
+  body {
+    min-height: 100%;
+    background-color: var(--bg);
+    background-image:
+      radial-gradient(ellipse 95% 45% at 50% -10%, rgba(124, 92, 255, 0.2), transparent 72%),
+      radial-gradient(circle 420px at 92% 8%, rgba(212, 175, 106, 0.08), transparent),
+      radial-gradient(circle 420px at 8% 85%, rgba(124, 92, 255, 0.08), transparent);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    padding-bottom: calc(104px + env(safe-area-inset-bottom));
+  }
+
+  .grid-backdrop {
+    position: fixed;
+    inset: 0;
+    background-size: 48px 48px;
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app-shell {
+    position: relative;
+    z-index: 1;
+    max-width: 520px;
+    margin: 0 auto;
+    padding: 16px 16px 28px;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ВНЕ TELEGRAM ПРЕДУПРЕЖДЕНИЕ */
+  .tg-warning {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    border-radius: 14px;
+    background: rgba(212, 175, 106, 0.1);
+    border: 1px solid rgba(212, 175, 106, 0.42);
+    color: #f3d9a4;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .tg-warning.visible {
+    display: flex;
+  }
+
+  .tg-warning a {
+    flex-shrink: 0;
+    padding: 7px 12px;
+    border-radius: 10px;
+    background: rgba(212, 175, 106, 0.18);
+    border: 1px solid rgba(212, 175, 106, 0.5);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 12.5px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  /* HEADER */
+  .app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.06em;
+    color: var(--text-pure);
+  }
+
+  .logo-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent2);
+    box-shadow: 0 0 10px var(--accent);
+  }
+
+  .brand-sub {
+    font-size: 12.5px;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  /* SCREENS */
+  .screen {
+    display: none;
+    flex: 1;
+    flex-direction: column;
+    padding-top: 16px;
+  }
+
+  .screen.active {
+    display: flex;
+    animation: fadeSlideIn 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes fadeSlideIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* TYPOGRAPHY */
+  h1 {
+    font-size: clamp(26px, 6.8vw, 32px);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.025em;
+    color: var(--text-pure);
+  }
+
+  h2 {
+    font-size: clamp(22px, 5.8vw, 26px);
+    font-weight: 800;
+    line-height: 1.22;
+    letter-spacing: -0.02em;
+    color: var(--text-pure);
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-pure);
+  }
+
+  .lead {
+    margin-top: 14px;
+    font-size: 16px;
+    color: #cfcfdc;
+    line-height: 1.55;
+  }
+
+  .fine-print {
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* BUTTONS */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 54px;
+    padding: 15px 22px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #8a6bff, #6b46f6);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--text-pure);
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: 0 8px 28px -4px rgba(124, 92, 255, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transition: transform 0.18s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  }
+
+  .btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 34px -4px rgba(124, 92, 255, 0.62);
+  }
+
+  .btn:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  .btn:disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+
+  .btn.ghost {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--line);
+    color: var(--text);
+    box-shadow: none;
+  }
+
+  .btn.ghost:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--line-active);
+  }
+
+  .btn.gold {
+    background: linear-gradient(135deg, rgba(212, 175, 106, 0.22), rgba(212, 175, 106, 0.1));
+    border: 1px solid rgba(212, 175, 106, 0.55);
+    color: #f3d9a4;
+    box-shadow: 0 8px 24px -6px rgba(212, 175, 106, 0.22);
+  }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--accent2);
+    outline-offset: 2px;
+  }
+
+  /* WELCOME CARD */
+  .welcome-card {
+    background: linear-gradient(160deg, rgba(18, 18, 36, 0.94), rgba(11, 11, 22, 0.98));
+    border: 1px solid var(--line-active);
+    border-radius: 24px;
+    padding: 28px 22px;
+    box-shadow: 0 20px 55px -18px rgba(124, 92, 255, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    margin-top: 8px;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(124, 92, 255, 0.14);
+    border: 1px solid rgba(124, 92, 255, 0.35);
+    color: var(--accent2);
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 12.5px;
+    font-weight: 700;
+    margin-bottom: 18px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent2);
+    box-shadow: 0 0 8px var(--accent);
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    margin-bottom: 16px;
+  }
+
+  .progress-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 8px;
+  }
+
+  .progress-track {
+    width: 100%;
+    height: 6px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.08);
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 14.28%;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    box-shadow: 0 0 12px var(--accent-glow);
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* QUESTION CARD */
+  .question-stage {
+    transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+
+  .question-stage.anim-enter {
+    animation: questionSlide 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes questionSlide {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .chips {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .chip {
+    width: 100%;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 15px;
+    border-radius: 15px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.32;
+    cursor: pointer;
+    transition: background 0.16s ease, border-color 0.16s ease, transform 0.16s ease, box-shadow 0.16s ease;
+  }
+
+  .chip:hover {
+    background: var(--card-hover);
+    border-color: var(--line-active);
+  }
+
+  .chip[aria-checked="true"] {
+    background: linear-gradient(135deg, rgba(124, 92, 255, 0.24), rgba(124, 92, 255, 0.12));
+    border-color: var(--accent2);
+    color: var(--text-pure);
+    font-weight: 700;
+    box-shadow: 0 8px 24px -8px rgba(124, 92, 255, 0.45);
+  }
+
+  .chip-check {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255, 255, 255, 0.22);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: transparent;
+    transition: all 0.16s ease;
+  }
+
+  .chip[aria-checked="true"] .chip-check {
+    background: var(--accent);
+    border-color: var(--accent2);
+    color: #ffffff;
+    box-shadow: 0 0 10px var(--accent-glow);
+  }
+
+  .other-input-wrap {
+    margin-top: 12px;
+    display: none;
+  }
+
+  .other-input-wrap.visible {
+    display: block;
+    animation: fadeSlideIn 0.22s ease;
+  }
+
+  .text-field,
+  .textarea-field {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 14px;
+    background: var(--card);
+    border: 1px solid rgba(124, 92, 255, 0.35);
+    color: var(--text-pure);
+    font-family: inherit;
+    font-size: 15.5px;
+    line-height: 1.5;
+  }
+
+  .textarea-field {
+    margin-top: 18px;
+    resize: vertical;
+    min-height: 106px;
+  }
+
+  /* BOTTOM BAR (BROWSER FALLBACK WHEN NATIVE MAINBUTTON INACTIVE) */
+  .bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    background: rgba(10, 10, 18, 0.92);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid var(--line);
+    padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+  }
+
+  .bottom-nav.hidden {
+    display: none;
+  }
+
+  .bottom-nav-inner {
+    max-width: 520px;
+    margin: 0 auto;
+    display: flex;
+    gap: 10px;
+  }
+
+  .bottom-nav-inner .btn-back {
+    width: auto;
+    min-width: 106px;
+    flex-shrink: 0;
+  }
+
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+  }
+
+  .loading .spinner {
+    display: inline-block;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* SCREEN 3: SUCCESS */
+  .result-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 18px;
+  }
+
+  .result-block {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 20px 18px;
+  }
+
+  .result-block.code-block {
+    background: linear-gradient(155deg, rgba(124, 92, 255, 0.16), rgba(18, 18, 36, 0.96));
+    border: 1px solid rgba(167, 139, 255, 0.45);
+    box-shadow: 0 14px 40px -12px rgba(124, 92, 255, 0.35);
+  }
+
+  .code-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(10, 10, 18, 0.75);
+    border: 1px solid rgba(167, 139, 255, 0.5);
+    box-shadow: 0 0 24px rgba(124, 92, 255, 0.25);
+  }
+
+  .code-word {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-size: clamp(16px, 4.3vw, 23px);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    color: var(--text-pure);
+    text-shadow: 0 0 18px rgba(167, 139, 255, 0.45);
+    white-space: nowrap;
+  }
+
+  .copy-btn {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: rgba(124, 92, 255, 0.22);
+    border: 1px solid rgba(167, 139, 255, 0.5);
+    color: var(--text-pure);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.18s ease;
+  }
+
+  .copy-btn:hover {
+    background: rgba(124, 92, 255, 0.38);
+  }
+
+  .result-block p.desc {
+    margin-top: 10px;
+    font-size: 14.5px;
+    color: #cfcfdc;
+    line-height: 1.55;
+  }
+
+  .queue-notice {
+    display: none;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(212, 175, 106, 0.1);
+    border: 1px solid rgba(212, 175, 106, 0.4);
+    color: #f3d9a4;
+    font-size: 13.5px;
+  }
+
+  .queue-notice.visible {
+    display: block;
+  }
+
+  /* SCREEN 4: ERROR */
+  .error-card {
+    background: linear-gradient(165deg, rgba(255, 93, 108, 0.1), var(--card));
+    border: 1px solid rgba(255, 93, 108, 0.35);
+    border-radius: 22px;
+    padding: 26px 20px;
+    margin-top: 12px;
+  }
+
+  .error-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: rgba(255, 93, 108, 0.14);
+    border: 1px solid rgba(255, 93, 108, 0.4);
+    color: var(--red);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .screen.active,
+    .question-stage.anim-enter,
+    .progress-fill,
+    .btn,
+    .chip {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-backdrop" aria-hidden="true"></div>
+
+<div class="app-shell">
+  <!-- ПРЕДУПРЕЖДЕНИЕ ВНЕ TELEGRAM -->
+  <div class="tg-warning" id="tg-warning" role="alert">
+    <span>Открой анкету внутри Telegram</span>
+    <a href="https://t.me/Indigopeople_assistant" id="tg-bot-link" target="_blank" rel="noopener noreferrer">Открыть в Telegram</a>
+  </div>
+
+  <!-- ШАПКА -->
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo">
+        <span class="logo-dot" aria-hidden="true"></span>
+        INDIGO
+      </div>
+    </div>
+    <div class="brand-sub">AI-команда для практиков</div>
+  </header>
+
+  <!-- ЭКРАН 1 — ПРИВЕТСТВИЕ -->
+  <main id="screen-welcome" class="screen active">
+    <div class="welcome-card">
+      <div class="eyebrow">AI-команда для практиков</div>
+      <h1>Чтобы получить видео и подарок — заполни короткую анкету</h1>
+      <p class="lead">7 вопросов, 2 минуты. Ответы нужны, чтобы понять, что тебе полезнее всего.</p>
+      <div style="margin-top:24px">
+        <button type="button" class="btn" id="btn-start">Начать</button>
+      </div>
+      <p class="fine-print">Видео бесплатное. В конце — кодовое слово и подарок.</p>
+    </div>
+  </main>
+
+  <!-- ЭКРАН 2 — ВОПРОСЫ -->
+  <section id="screen-questions" class="screen" aria-live="polite">
+    <div class="progress-wrap">
+      <div class="progress-meta">
+        <span id="progress-text">Шаг 1 из 7</span>
+      </div>
+      <div class="progress-track" role="progressbar" aria-valuemin="1" aria-valuemax="7" aria-valuenow="1" id="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="question-stage" id="question-stage">
+      <h2 id="question-title">Кто ты?</h2>
+      <div class="chips" id="options-list" role="radiogroup" aria-labelledby="question-title"></div>
+
+      <div class="other-input-wrap" id="other-input-wrap">
+        <input type="text" class="text-field" id="other-input" placeholder="Укажи свой вариант" aria-label="Свой вариант">
+      </div>
+
+      <div id="pain-wrap" style="display:none">
+        <textarea class="textarea-field" id="pain-input" rows="3" placeholder="Напиши здесь..."></textarea>
+        <p class="fine-print" id="pain-caption">Ответ не обязателен. Но по нему я пойму, с чего начать разбор.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ЭКРАН 3 — УСПЕХ -->
+  <section id="screen-success" class="screen">
+    <h2>Готово. Вот твоё:</h2>
+
+    <div class="result-stack">
+      <div class="queue-notice" id="queue-notice">
+        Данные уйдут, когда связь восстановится
+      </div>
+
+      <!-- Блок 1 — кодовое слово -->
+      <div class="result-block code-block">
+        <div class="code-row">
+          <span class="code-word" id="code-word-text">ЧЕЛОВЕК-ПАУК</span>
+          <button type="button" class="copy-btn" id="btn-copy-code" aria-label="Скопировать кодовое слово ЧЕЛОВЕК-ПАУК">Скопировать</button>
+        </div>
+        <p class="desc">Напиши это слово в личку — и я пришлю подарок: стартовый набор нейросетей для психолога с промтами и контактами проверенных продавцов подписок.</p>
+      </div>
+
+      <!-- Блок 2 — видео -->
+      <div class="result-block">
+        <h3>Видео</h3>
+        <div style="margin-top:14px">
+          <a class="btn" id="success-video-link" href="https://t.me/Indigopeople_assistant" target="_blank" rel="noopener noreferrer">Смотреть видео (54 минуты)</a>
+        </div>
+        <p class="desc">В конце видео — то же кодовое слово. Если ты уже смотрел — просто напиши его мне.</p>
+      </div>
+
+      <!-- Блок 3 — разбор -->
+      <div class="result-block">
+        <h3>Разбор</h3>
+        <p class="desc">Если хочешь понять, что конкретно это даст твоей практике — запишись на разбор. Посмотрим, с чего начать и за сколько встреч окупится.</p>
+        <div style="margin-top:16px">
+          <a class="btn gold" id="success-consult-link" href="https://t.me/Indigopeople_assistant" target="_blank" rel="noopener noreferrer">Записаться на разбор</a>
+        </div>
+      </div>
+
+      <!-- Блок 4 -->
+      <p class="fine-print" style="text-align:center">Данные ушли Антону. Он напишет лично, если увидит, что тебе это полезно.</p>
+    </div>
+  </section>
+
+  <!-- ЭКРАН 4 — ОШИБКА -->
+  <section id="screen-error" class="screen">
+    <div class="error-card">
+      <div class="error-icon" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <h2>Не отправилось. Проверь интернет и попробуй ещё раз.</h2>
+      <div style="margin-top:22px">
+        <button type="button" class="btn" id="btn-retry">Попробовать снова</button>
+      </div>
+      <p class="fine-print">Если не получается — напиши в личку: <a href="https://t.me/ahilleon" target="_blank" rel="noopener noreferrer">@ahilleon</a></p>
+    </div>
+  </section>
+</div>
+
+<!-- НИЖНЯЯ НАВИГАЦИЯ (показывается вне нативного Telegram MainButton или при отсутствии initData) -->
+<div class="bottom-nav hidden" id="bottom-nav">
+  <div class="bottom-nav-inner">
+    <button type="button" class="btn ghost btn-back" id="btn-back">Назад</button>
+    <button type="button" class="btn" id="btn-next" disabled>
+      <span class="spinner" aria-hidden="true"></span>
+      <span id="btn-next-label">Далее</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // =========================================================================
+    // НАСТРОЙКИ (пропиши сюда свой URL backend CRM и ссылки)
+    // Пример backend endpoint: https://api.indigolab.pro/api/ai-command-leads
+    // =========================================================================
+    var CRM_ENDPOINT = 'https://YOUR_CRM_DOMAIN/api/ai-command-leads';
+    var VIDEO_URL = 'https://t.me/Indigopeople_assistant';
+    var CONSULT_URL = 'https://t.me/Indigopeople_assistant';
+    var BOT_URL = 'https://t.me/Indigopeople_assistant';
+    var QUEUE_STORAGE_KEY = 'indigo_ai_lead_queue';
+
+    var STEPS = [
+      {
+        id: 'role',
+        question: 'Кто ты?',
+        options: [
+          'Психолог',
+          'Коуч',
+          'Сексолог',
+          'Телесный терапевт',
+          'Таролог / астролог',
+          'Массажист',
+          'Психолог-консультант',
+          'Другое'
+        ],
+        hasOther: true
+      },
+      {
+        id: 'site',
+        question: 'Есть ли у тебя сайт?',
+        options: [
+          'Свой сайт',
+          'Сайт на агрегаторе (b17, yasno и т.п.)',
+          'Только соцсети',
+          'Пока нет'
+        ]
+      },
+      {
+        id: 'session_price',
+        question: 'Сколько стоит твоя сессия?',
+        options: [
+          'До 2000 ₽',
+          '2000–5000 ₽',
+          '5000–10000 ₽',
+          '10000–20000 ₽',
+          'Больше 20000 ₽',
+          'Консультация бесплатная'
+        ]
+      },
+      {
+        id: 'records_sessions',
+        question: 'Записываешь ли ты сессии?',
+        options: ['Всегда', 'Иногда', 'Нет']
+      },
+      {
+        id: 'does_summaries',
+        question: 'Делаешь ли ты саммари и транскрибацию?',
+        options: [
+          'Вручную, после сессии',
+          'Изредка',
+          'Никогда',
+          'У меня есть ассистент'
+        ]
+      },
+      {
+        id: 'has_assistant',
+        question: 'Есть ли у тебя ассистент?',
+        options: ['Да, живой человек', 'Да, нейросеть / бот', 'Нет']
+      },
+      {
+        id: 'ai_experience',
+        question: 'Что ты уже пробовал с нейросетями?',
+        options: [
+          'Только чат (DeepSeek, ChatGPT, Gemini)',
+          'Генерировал картинки и видео',
+          'Пробовал агентов и автоматизацию',
+          'Пока ничего'
+        ]
+      },
+      {
+        id: 'pain_point',
+        question: 'Что для тебя сейчас главная боль — что отнимает больше всего времени?',
+        options: [],
+        optional: true
+      }
+    ];
+
+    var answers = {
+      role: '',
+      role_other: '',
+      site: '',
+      session_price: '',
+      records_sessions: '',
+      does_summaries: '',
+      has_assistant: '',
+      ai_experience: '',
+      pain_point: ''
+    };
+
+    var currentStep = 0;
+    var currentScreen = 'welcome';
+    var isSubmitting = false;
+
+    var tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+    var hasValidTgInitData = Boolean(tg && tg.initData && tg.initData.length > 0);
+    var useNativeMainButton = Boolean(hasValidTgInitData && tg && tg.MainButton);
+
+    // Инициализация Telegram Web App SDK
+    if (tg) {
+      try {
+        tg.ready();
+        tg.expand();
+        if (typeof tg.setHeaderColor === 'function') tg.setHeaderColor('#0a0a12');
+        if (typeof tg.setBackgroundColor === 'function') tg.setBackgroundColor('#0a0a12');
+        if (typeof tg.disableVerticalSwipes === 'function') tg.disableVerticalSwipes();
+        // Адаптируем акцент под themeParams при сохранении тёмной палитры Indigo Lab
+        if (tg.themeParams && tg.themeParams.button_color) {
+          document.documentElement.style.setProperty('--tg-theme-accent', tg.themeParams.button_color);
+        }
+      } catch (e) {
+        // Безопасный фолбэк вне Telegram
+      }
+    }
+
+    var tgWarningEl = document.getElementById('tg-warning');
+    var tgBotLinkEl = document.getElementById('tg-bot-link');
+    var successVideoLinkEl = document.getElementById('success-video-link');
+    var successConsultLinkEl = document.getElementById('success-consult-link');
+    if (tgBotLinkEl) tgBotLinkEl.href = BOT_URL;
+    if (successVideoLinkEl) successVideoLinkEl.href = VIDEO_URL;
+    if (successConsultLinkEl) successConsultLinkEl.href = CONSULT_URL;
+
+    if (!hasValidTgInitData && tgWarningEl) {
+      tgWarningEl.classList.add('visible');
+    }
+
+    // UTM-параметры
+    function getUtm() {
+      var sp = new URLSearchParams(window.location.search);
+      return {
+        utm_source: sp.get('utm_source') || '',
+        utm_medium: sp.get('utm_medium') || '',
+        utm_campaign: sp.get('utm_campaign') || ''
+      };
+    }
+
+    // Очередь localStorage и повторная досылка при следующем открытии
+    function loadQueue() {
+      try {
+        var raw = localStorage.getItem(QUEUE_STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveQueue(list) {
+      try {
+        localStorage.setItem(QUEUE_STORAGE_KEY, JSON.stringify(list));
+      } catch (e) {}
+    }
+
+    function enqueueLead(payload) {
+      var q = loadQueue();
+      q.push(payload);
+      saveQueue(q);
+    }
+
+    function flushQueue() {
+      var q = loadQueue();
+      if (!q.length || CRM_ENDPOINT.indexOf('YOUR_CRM_DOMAIN') !== -1) return;
+      var remaining = [];
+      Promise.all(
+        q.map(function(item) {
+          return fetch(CRM_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(item)
+          }).then(function(res) {
+            if (!res.ok) remaining.push(item);
+          }).catch(function() {
+            remaining.push(item);
+          });
+        })
+      ).then(function() {
+        saveQueue(remaining);
+      });
+    }
+
+    flushQueue();
+
+    function hapticLight() {
+      try {
+        if (tg && tg.HapticFeedback && typeof tg.HapticFeedback.impactOccurred === 'function') {
+          tg.HapticFeedback.impactOccurred('light');
+        }
+      } catch (e) {}
+    }
+
+    function buildPayload() {
+      var u = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : {};
+      var utm = getUtm();
+      return {
+        telegram_id: u.id !== undefined && u.id !== null ? String(u.id) : '',
+        first_name: u.first_name || '',
+        last_name: u.last_name || '',
+        username: u.username || '',
+        start_param: (tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) ? tg.initDataUnsafe.start_param : '',
+        init_data: (tg && tg.initData) ? tg.initData : '',
+        role: answers.role,
+        role_other: answers.role === 'Другое' ? answers.role_other.trim() : '',
+        site: answers.site,
+        session_price: answers.session_price,
+        records_sessions: answers.records_sessions,
+        does_summaries: answers.does_summaries,
+        has_assistant: answers.has_assistant,
+        ai_experience: answers.ai_experience,
+        pain_point: answers.pain_point.trim(),
+        utm_source: utm.utm_source,
+        utm_medium: utm.utm_medium,
+        utm_campaign: utm.utm_campaign
+      };
+    }
+
+    function canAdvance() {
+      var step = STEPS[currentStep];
+      if (!step) return false;
+      if (step.optional) return true;
+      var val = (answers[step.id] || '').trim();
+      if (!val) return false;
+      if (step.hasOther && val === 'Другое') {
+        return answers.role_other.trim().length > 0;
+      }
+      return true;
+    }
+
+    var screenEls = {
+      welcome: document.getElementById('screen-welcome'),
+      questions: document.getElementById('screen-questions'),
+      success: document.getElementById('screen-success'),
+      error: document.getElementById('screen-error')
+    };
+
+    var bottomNav = document.getElementById('bottom-nav');
+    var btnBack = document.getElementById('btn-back');
+    var btnNext = document.getElementById('btn-next');
+    var btnNextLabel = document.getElementById('btn-next-label');
+    var progressText = document.getElementById('progress-text');
+    var progressFill = document.getElementById('progress-fill');
+    var progressTrack = document.getElementById('progress-track');
+    var questionStage = document.getElementById('question-stage');
+    var questionTitle = document.getElementById('question-title');
+    var optionsList = document.getElementById('options-list');
+    var otherWrap = document.getElementById('other-input-wrap');
+    var otherInput = document.getElementById('other-input');
+    var painWrap = document.getElementById('pain-wrap');
+    var painInput = document.getElementById('pain-input');
+    var queueNotice = document.getElementById('queue-notice');
+
+    function syncTelegramButtons() {
+      var isQuestions = currentScreen === 'questions';
+      var isLastStep = currentStep === STEPS.length - 1;
+      var readyToProceed = canAdvance();
+
+      if (tg && tg.BackButton) {
+        if (isQuestions && currentStep > 0) {
+          tg.BackButton.show();
+        } else {
+          tg.BackButton.hide();
+        }
+      }
+
+      if (useNativeMainButton && tg && tg.MainButton) {
+        if (isQuestions) {
+          tg.MainButton.setText(isLastStep ? 'Отправить' : 'Далее');
+          tg.MainButton.setParams({
+            color: readyToProceed ? '#7c5cff' : '#2a2a42',
+            text_color: readyToProceed ? '#ffffff' : '#9a9ab0',
+            is_active: readyToProceed && !isSubmitting,
+            is_visible: true
+          });
+          if (isSubmitting) {
+            tg.MainButton.showProgress();
+          } else {
+            tg.MainButton.hideProgress();
+          }
+        } else {
+          tg.MainButton.hide();
+        }
+      }
+
+      if (isQuestions && !useNativeMainButton) {
+        bottomNav.classList.remove('hidden');
+      } else {
+        bottomNav.classList.add('hidden');
+      }
+
+      btnBack.disabled = isSubmitting;
+      btnBack.textContent = 'Назад';
+      btnNextLabel.textContent = isLastStep ? 'Отправить' : 'Далее';
+      btnNext.disabled = !readyToProceed || isSubmitting;
+      if (isSubmitting) {
+        btnNext.classList.add('loading');
+      } else {
+        btnNext.classList.remove('loading');
+      }
+    }
+
+    function showScreen(name) {
+      currentScreen = name;
+      Object.keys(screenEls).forEach(function(key) {
+        if (key === name) {
+          screenEls[key].classList.add('active');
+        } else {
+          screenEls[key].classList.remove('active');
+        }
+      });
+      syncTelegramButtons();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderStep(animate) {
+      var step = STEPS[currentStep];
+      var stepNum = Math.min(currentStep + 1, 7);
+      progressText.textContent = 'Шаг ' + stepNum + ' из 7';
+      var pct = Math.min(((currentStep + 1) / 7) * 100, 100);
+      progressFill.style.width = pct + '%';
+      progressTrack.setAttribute('aria-valuenow', String(stepNum));
+
+      if (animate) {
+        questionStage.classList.remove('anim-enter');
+        void questionStage.offsetWidth;
+        questionStage.classList.add('anim-enter');
+      }
+
+      questionTitle.textContent = step.question;
+      optionsList.innerHTML = '';
+
+      if (step.options && step.options.length > 0) {
+        optionsList.style.display = 'flex';
+        painWrap.style.display = 'none';
+
+        step.options.forEach(function(opt) {
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'chip';
+          btn.setAttribute('role', 'radio');
+          var isSelected = answers[step.id] === opt;
+          btn.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+
+          var labelSpan = document.createElement('span');
+          labelSpan.textContent = opt;
+
+          var checkSpan = document.createElement('span');
+          checkSpan.className = 'chip-check';
+          checkSpan.setAttribute('aria-hidden', 'true');
+          checkSpan.textContent = '✓';
+
+          btn.appendChild(labelSpan);
+          btn.appendChild(checkSpan);
+
+          btn.addEventListener('click', function() {
+            hapticLight();
+            answers[step.id] = opt;
+            Array.prototype.forEach.call(optionsList.children, function(child) {
+              child.setAttribute('aria-checked', child === btn ? 'true' : 'false');
+            });
+
+            if (step.hasOther) {
+              if (opt === 'Другое') {
+                otherWrap.classList.add('visible');
+                otherInput.focus();
+                setTimeout(function() {
+                  otherWrap.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                }, 60);
+              } else {
+                otherWrap.classList.remove('visible');
+              }
+            }
+            syncTelegramButtons();
+          });
+
+          optionsList.appendChild(btn);
+        });
+
+        if (step.hasOther && answers.role === 'Другое') {
+          otherInput.value = answers.role_other;
+          otherWrap.classList.add('visible');
+        } else {
+          otherWrap.classList.remove('visible');
+        }
+      } else {
+        optionsList.style.display = 'none';
+        otherWrap.classList.remove('visible');
+        painWrap.style.display = 'block';
+        painInput.value = answers.pain_point;
+      }
+
+      syncTelegramButtons();
+    }
+
+    function submitSurvey() {
+      if (isSubmitting) return;
+      isSubmitting = true;
+      syncTelegramButtons();
+
+      var payload = buildPayload();
+      var params = new URLSearchParams(window.location.search);
+      var forceError = params.get('simulateError') === '1';
+
+      if (forceError) {
+        enqueueLead(payload);
+        setTimeout(function() {
+          isSubmitting = false;
+          showScreen('error');
+        }, 350);
+        return;
+      }
+
+      // Режим локального превью до указания реального CRM_ENDPOINT
+      if (CRM_ENDPOINT.indexOf('YOUR_CRM_DOMAIN') !== -1) {
+        enqueueLead(payload);
+        setTimeout(function() {
+          isSubmitting = false;
+          queueNotice.classList.remove('visible');
+          showScreen('success');
+        }, 300);
+        return;
+      }
+
+      var controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      var timer = controller ? setTimeout(function() { controller.abort(); }, 7000) : null;
+
+      fetch(CRM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller ? controller.signal : undefined
+      })
+        .then(function(res) {
+          if (timer) clearTimeout(timer);
+          if (!res.ok) {
+            throw new Error('HTTP ' + res.status);
+          }
+          isSubmitting = false;
+          queueNotice.classList.remove('visible');
+          showScreen('success');
+        })
+        .catch(function() {
+          if (timer) clearTimeout(timer);
+          enqueueLead(payload);
+          isSubmitting = false;
+          queueNotice.classList.add('visible');
+          showScreen('error');
+        });
+    }
+
+    function goNext() {
+      if (!canAdvance() || isSubmitting) return;
+      hapticLight();
+      if (currentStep < STEPS.length - 1) {
+        currentStep += 1;
+        renderStep(true);
+      } else {
+        submitSurvey();
+      }
+    }
+
+    function goBack() {
+      if (isSubmitting) return;
+      hapticLight();
+      if (currentScreen !== 'questions') return;
+      if (currentStep > 0) {
+        currentStep -= 1;
+        renderStep(true);
+      } else {
+        showScreen('welcome');
+      }
+    }
+
+    document.getElementById('btn-start').addEventListener('click', function() {
+      hapticLight();
+      currentStep = 0;
+      renderStep(true);
+      showScreen('questions');
+    });
+
+    btnNext.addEventListener('click', goNext);
+    btnBack.addEventListener('click', goBack);
+    document.getElementById('btn-retry').addEventListener('click', function() {
+      showScreen('questions');
+      submitSurvey();
+    });
+
+    otherInput.addEventListener('input', function(e) {
+      answers.role_other = e.target.value;
+      syncTelegramButtons();
+    });
+
+    painInput.addEventListener('input', function(e) {
+      answers.pain_point = e.target.value;
+    });
+
+    if (tg && tg.MainButton && typeof tg.MainButton.onClick === 'function') {
+      tg.MainButton.onClick(goNext);
+    }
+
+    if (tg && tg.BackButton && typeof tg.BackButton.onClick === 'function') {
+      tg.BackButton.onClick(goBack);
+    }
+
+    var copyBtn = document.getElementById('btn-copy-code');
+    copyBtn.addEventListener('click', function() {
+      hapticLight();
+      var code = 'ЧЕЛОВЕК-ПАУК';
+      function markCopied() {
+        copyBtn.textContent = 'Скопировано';
+        setTimeout(function() {
+          copyBtn.textContent = 'Скопировать';
+        }, 2500);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(code).then(markCopied).catch(markCopied);
+      } else {
+        markCopied();
+      }
+    });
+  })();
+</script>
+
+</body>
+</html>
