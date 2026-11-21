@@ -201,6 +201,162 @@ export function VideoLanding() {
         </div>
       </section>
 
+      {/* 2.5. КТО Я ТАКОЙ И INDIGO LAB */}
+      <section className="py-14 sm:py-20">
+        <div className="reveal max-w-3xl">
+          <h2 className="text-2xl sm:text-4xl lg:text-[42px] font-extrabold leading-tight text-white">
+            Кто я такой и почему мне можно это слушать
+          </h2>
+          <p className="text-[#9a9ab0] text-sm sm:text-base leading-relaxed mt-3.5">
+            Я не программист и не айтишник. До психологии я пять лет в маркетинге и сам ставил задачи живой команде — той самой, за полмиллиона в месяц.
+          </p>
+        </div>
+
+        {/* Карточка-биография */}
+        <div className="reveal mt-8 rounded-3xl p-6 sm:p-9 bg-gradient-to-br from-[#121226] to-[#0b0b16] border border-[#7c5cff]/30 shadow-[0_20px_50px_-15px_rgba(0,0,0,0.65)]">
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 items-start">
+            <div className="relative w-[124px] h-[124px] sm:w-[140px] sm:h-[140px] rounded-full flex-shrink-0 overflow-hidden border-2 border-[#a78bff]/50 bg-gradient-to-br from-[#7c5cff]/30 via-[#181830] to-[#d4af6a]/20 shadow-[0_0_32px_rgba(124,92,255,0.28)] flex items-center justify-center">
+              <span className="text-2xl font-extrabold tracking-wider text-[#a78bff] select-none" aria-hidden="true">
+                АШ
+              </span>
+              <img
+                src="/img/anton.jpg"
+                alt="Антон Шумкин — психолог-консультант, гипнотерапевт"
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.style.display = 'none';
+                }}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            </div>
+
+            <div className="flex-1 min-w-0">
+              <h3 className="text-2xl sm:text-[26px] font-extrabold text-white">Антон Шумкин</h3>
+              <div className="text-sm font-semibold text-[#a78bff] mt-1">
+                Психолог-консультант, гипнотерапевт, 1500 часов практики
+              </div>
+              <p className="text-[#cfcfdc] text-sm sm:text-[15.5px] leading-relaxed mt-4">
+                Помогаю людям убирать страхи и блоки в отношениях, сексе, деньгах и самореализации — с конкретным результатом после сессии, а не годами работы. Моя суперсила — решать их за 1–3 сессии через БПС-программирование. Использую гипнотерапию с возрастным регрессом, эмоционально-образную и экспозиционную терапию, техники НЛП. Принцип один: у работы с психологом должен быть конкретный результат с чёткими критериями — и прийти нужно быстро, потому что время дороже денег. До психологии — 5 лет управлял маркетинговым агентством, вёл партнёрские программы с VK и Яндекс. Без нереальных обещаний: если вижу, что могу помочь — предлагаю поработать. Если нет — скажу честно.
+              </p>
+            </div>
+          </div>
+
+          {/* 6 плиток фактов */}
+          <div className="stagger-group grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+            <div className="stagger-item p-5 sm:p-6 rounded-2xl bg-[#0d0d1a] border border-[#7c5cff]/25 hover:border-[#a78bff]/60 transition-all duration-200 hover:-translate-y-1">
+              <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[#7c5cff]/12 border border-[#7c5cff]/30 text-[#7c5cff] mb-3.5" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <polyline points="12 7 12 12 15.5 14" />
+                </svg>
+              </span>
+              <div className="text-3xl font-extrabold text-[#7c5cff] tracking-tight tabular-nums">1500</div>
+              <div className="text-sm font-bold text-white mt-1">часов практики</div>
+              <p className="text-xs sm:text-[13.5px] text-[#9a9ab0] leading-relaxed mt-2">
+                Психолог-консультант, гипнотерапевт. Работаю с тем, что обычно замалчивают: страхи и блоки в сексе и отношениях, выгорание, денежные блоки, психосоматика, РПП.
+              </p>
+            </div>
+
+            <div className="stagger-item p-5 sm:p-6 rounded-2xl bg-[#0d0d1a] border border-[#7c5cff]/25 hover:border-[#a78bff]/60 transition-all duration-200 hover:-translate-y-1">
+              <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[#7c5cff]/12 border border-[#7c5cff]/30 text-[#7c5cff] mb-3.5" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
+                  <polyline points="16 7 22 7 22 13" />
+                </svg>
+              </span>
+              <div className="text-3xl font-extrabold text-[#d4af6a] tracking-tight tabular-nums">1–3</div>
+              <div className="text-sm font-bold text-white mt-1">сессии до результата</div>
+              <p className="text-xs sm:text-[13.5px] text-[#9a9ab0] leading-relaxed mt-2">
+                Вместо лет работы. Проверяем результат в реальности, а не «по ощущениям».
+              </p>
+            </div>
+
+            <div className="stagger-item p-5 sm:p-6 rounded-2xl bg-[#0d0d1a] border border-[#7c5cff]/25 hover:border-[#a78bff]/60 transition-all duration-200 hover:-translate-y-1">
+              <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[#7c5cff]/12 border border-[#7c5cff]/30 text-[#7c5cff] mb-3.5" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="7" width="20" height="14" rx="2" />
+                  <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                </svg>
+              </span>
+              <div className="text-3xl font-extrabold text-[#7c5cff] tracking-tight">5 лет</div>
+              <div className="text-sm font-bold text-white mt-1">в маркетинге до психологии</div>
+              <p className="text-xs sm:text-[13.5px] text-[#9a9ab0] leading-relaxed mt-2">
+                Управлял агентством, ставил задачи живым дизайнерам, копирайтерам, разработчикам. Знаю, сколько такая команда стоит — и знаю, как она работает.
+              </p>
+            </div>
+
+            <div className="stagger-item p-5 sm:p-6 rounded-2xl bg-[#0d0d1a] border border-[#7c5cff]/25 hover:border-[#a78bff]/60 transition-all duration-200 hover:-translate-y-1">
+              <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[#7c5cff]/12 border border-[#7c5cff]/30 text-[#7c5cff] mb-3.5" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </span>
+              <div className="text-3xl font-extrabold text-[#d4af6a] tracking-tight tabular-nums">1</div>
+              <div className="text-sm font-bold text-white mt-1">человек, который всё это собрал</div>
+              <p className="text-xs sm:text-[13.5px] text-[#9a9ab0] leading-relaxed mt-2">
+                Никакого найма. Никакого аутсорса. Все сайты, обложки, тесты и тексты в этом видео сделаны одним человеком.
+              </p>
+            </div>
+
+            <div className="stagger-item p-5 sm:p-6 rounded-2xl bg-[#0d0d1a] border border-[#7c5cff]/25 hover:border-[#a78bff]/60 transition-all duration-200 hover:-translate-y-1">
+              <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[#7c5cff]/12 border border-[#7c5cff]/30 text-[#7c5cff] mb-3.5" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 20V10" /><path d="M12 20V4" /><path d="M6 20v-6" />
+                </svg>
+              </span>
+              <div className="text-3xl font-extrabold text-[#7c5cff] tracking-tight tabular-nums">47%</div>
+              <div className="text-sm font-bold text-white mt-1">девушек — сложности с оргазмом</div>
+              <p className="text-xs sm:text-[13.5px] text-[#9a9ab0] leading-relaxed mt-2">
+                Данные моего собственного теста: 25 вопросов, растущая выборка. Это и есть моя кандидатская диссертация.
+              </p>
+            </div>
+
+            <div className="stagger-item p-5 sm:p-6 rounded-2xl bg-[#0d0d1a] border border-[#7c5cff]/25 hover:border-[#a78bff]/60 transition-all duration-200 hover:-translate-y-1">
+              <span className="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-[#7c5cff]/12 border border-[#7c5cff]/30 text-[#7c5cff] mb-3.5" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                </svg>
+              </span>
+              <div className="text-3xl font-extrabold text-[#d4af6a] tracking-tight tabular-nums">0₽</div>
+              <div className="text-sm font-bold text-white mt-1">за софт, который пишет за меня</div>
+              <p className="text-xs sm:text-[13.5px] text-[#9a9ab0] leading-relaxed mt-2">
+                Всё, что в этом видео, работает на подписках. Никакого дорогого софта.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Блок про Indigo Lab */}
+        <div className="reveal mt-7 relative rounded-3xl p-6 sm:p-9 bg-gradient-to-br from-[#d4af6a]/12 via-[#14111c]/95 to-[#0c0b14] border border-[#d4af6a]/45 shadow-[0_20px_55px_-15px_rgba(212,175,106,0.22),inset_0_1px_0_rgba(212,175,106,0.25)] overflow-hidden">
+          <div
+            className="absolute -top-12 -right-12 w-60 h-60 rounded-full pointer-events-none"
+            style={{
+              background: 'radial-gradient(circle, rgba(212, 175, 106, 0.2) 0%, transparent 70%)',
+              filter: 'blur(42px)',
+            }}
+            aria-hidden="true"
+          />
+          <div className="relative z-10 space-y-4">
+            <div className="inline-flex items-center gap-2 bg-[#d4af6a]/15 border border-[#d4af6a]/45 text-[#d4af6a] font-extrabold text-xs sm:text-sm tracking-[0.14em] px-3.5 py-1.5 rounded-lg">
+              INDIGO LAB
+            </div>
+            <p className="text-[#ebe7f2] text-base sm:text-[17px] leading-relaxed font-medium">
+              Indigo Lab — научно-исследовательская лаборатория, которая развивает метод БПСП: биопсихосоциальное программирование. Обучаем помогающих практиков, ведём исследования, публикуем результаты.
+            </p>
+            <p className="text-xs sm:text-[13.5px] text-[#d4af6a]/90 leading-relaxed">
+              Андрей Индиго — кандидат психологических наук, коуч PCC ICF международного класса. Основатель и научный руководитель метода.
+            </p>
+            <p className="text-[#cfcfdc] text-sm sm:text-[15.5px] leading-relaxed">
+              Я работаю в Indigo Lab как психолог, специалист по гипнозу, CPO проекта Deeps и автор медитаций. Это видео я пишу в первую очередь для учеников Indigo Lab и для практиков, которых я приглашал в нашу команду.
+            </p>
+            <div className="pt-3.5 border-t border-dashed border-[#d4af6a]/30 text-[#f3d9a4] text-sm sm:text-base font-semibold leading-relaxed">
+              Метод БПСП — это про то, чтобы убрать программу, которая тормозит. Ровно то же я делаю со своей практикой: убираю рутину, которая жрёт время.
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 3. ЧТО ВНУТРИ ВИДЕО */}
       <section id="inside" className="py-14 sm:py-20">
         <div className="reveal">

@@ -2,11 +2,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import { AlertCircle, Check } from 'lucide-react';
 import {
   CODE_WORD,
+  CONSULT_URL,
+  CRM_ENDPOINT,
   SURVEY_STEPS,
+  VIDEO_BEACON_SENT_KEY,
+  VIDEO_LINKS,
   buildLeadPayload,
+  buildTriggerVideoUrl,
   canAdvanceStep,
+  classifySubmitStatus,
   createInitialAnswers,
   extractUtmParams,
+  getActiveVideoLinkButtons,
   getProgressLabel,
   type SurveyAnswers,
 } from '../utils/miniappSurvey';
@@ -14,8 +21,6 @@ import {
 type ScreenState = 'welcome' | 'questions' | 'success' | 'error';
 
 const BOT_URL = 'https://t.me/Indigopeople_assistant';
-const VIDEO_URL = 'https://t.me/Indigopeople_assistant';
-const CONSULT_URL = 'https://t.me/Indigopeople_assistant';
 const QUEUE_STORAGE_KEY = 'indigo_ai_lead_queue';
 
 interface TelegramWebAppLike {
@@ -45,16 +50,43 @@ function getTelegramWebApp(): TelegramWebAppLike | null {
   return w.Telegram?.WebApp ?? null;
 }
 
+function enqueueLocalLead(payload: unknown) {
+  try {
+    const raw = localStorage.getItem(QUEUE_STORAGE_KEY);
+    const existing = raw ? (JSON.parse(raw) as unknown[]) : [];
+    existing.push(payload);
+    localStorage.setItem(QUEUE_STORAGE_KEY, JSON.stringify(existing));
+  } catch {
+    // Ignore storage quota issues
+  }
+}
+
+function triggerVideoBeacon(tg: TelegramWebAppLike | null) {
+  const tgId = tg?.initDataUnsafe?.user?.id;
+  if (!tgId) return;
+  try {
+    if (localStorage.getItem(VIDEO_BEACON_SENT_KEY) === '1') return;
+    localStorage.setItem(VIDEO_BEACON_SENT_KEY, '1');
+    const url = buildTriggerVideoUrl(tgId);
+    const img = new Image();
+    img.src = url;
+  } catch {
+    // Silent failure — links stay visible on Screen 3
+  }
+}
+
 export function MiniAppSurvey() {
   const [screen, setScreen] = useState<ScreenState>('welcome');
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<SurveyAnswers>(createInitialAnswers);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [copiedCode, setCopiedCode] = useState(false);
+  const [queuedNotice, setQueuedNotice] = useState(false);
   const otherInputRef = useRef<HTMLInputElement | null>(null);
 
   const tg = getTelegramWebApp();
   const hasValidTgInitData = Boolean(tg?.initData && tg.initData.length > 0);
+  const activeVideoButtons = getActiveVideoLinkButtons(VIDEO_LINKS);
 
   useEffect(() => {
     if (!tg) return;
@@ -68,6 +100,35 @@ export function MiniAppSurvey() {
       // Safe fallback outside Telegram
     }
   }, [tg]);
+
+  useEffect(() => {
+    if (!hasValidTgInitData) return;
+    try {
+      const raw = localStorage.getItem(QUEUE_STORAGE_KEY);
+      const list = raw ? (JSON.parse(raw) as Array<Record<string, unknown>>) : [];
+      if (!list.length) return;
+      const remaining: Array<Record<string, unknown>> = [];
+      Promise.all(
+        list.map((item) =>
+          fetch(CRM_ENDPOINT, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(item),
+          })
+            .then((res) => {
+              if (!res.ok && res.status >= 500) remaining.push(item);
+            })
+            .catch(() => {
+              remaining.push(item);
+            }),
+        ),
+      ).then(() => {
+        localStorage.setItem(QUEUE_STORAGE_KEY, JSON.stringify(remaining));
+      });
+    } catch {
+      // Ignore storage failures
+    }
+  }, [hasValidTgInitData]);
 
   const hapticLight = () => {
     try {
@@ -94,7 +155,7 @@ export function MiniAppSurvey() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
 
@@ -111,22 +172,67 @@ export function MiniAppSurvey() {
       utm,
     });
 
-    try {
-      const raw = localStorage.getItem(QUEUE_STORAGE_KEY);
-      const existing = raw ? (JSON.parse(raw) as unknown[]) : [];
-      existing.push(payload);
-      localStorage.setItem(QUEUE_STORAGE_KEY, JSON.stringify(existing));
-    } catch {
-      // Ignore storage quota issues in restricted browsers
+    if (forceError) {
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setScreen('error');
+        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 280);
+      return;
     }
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setScreen(forceError ? 'error' : 'success');
-      if (typeof window !== 'undefined') {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Outside Telegram (init_data empty): do NOT send to CRM, keep warning visible & allow preview
+    if (!hasValidTgInitData) {
+      enqueueLocalLead(payload);
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setQueuedNotice(false);
+        setScreen('success');
+        if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 250);
+      return;
+    }
+
+    const controller = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    const timer = controller ? setTimeout(() => controller.abort(), 7000) : null;
+
+    try {
+      const res = await fetch(CRM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: controller ? controller.signal : undefined,
+      });
+      if (timer) clearTimeout(timer);
+
+      const outcome = classifySubmitStatus(res.status);
+      if (outcome === 'error') {
+        setIsSubmitting(false);
+        setScreen('error');
+      } else if (outcome === 'queue_and_success') {
+        enqueueLocalLead(payload);
+        triggerVideoBeacon(tg);
+        setQueuedNotice(true);
+        setIsSubmitting(false);
+        setScreen('success');
+      } else {
+        triggerVideoBeacon(tg);
+        setQueuedNotice(false);
+        setIsSubmitting(false);
+        setScreen('success');
       }
-    }, 280);
+    } catch {
+      if (timer) clearTimeout(timer);
+      enqueueLocalLead(payload);
+      triggerVideoBeacon(tg);
+      setQueuedNotice(true);
+      setIsSubmitting(false);
+      setScreen('success');
+    }
+
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleNext = () => {
@@ -138,7 +244,7 @@ export function MiniAppSurvey() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     } else {
-      handleSubmit();
+      void handleSubmit();
     }
   };
 
@@ -352,6 +458,12 @@ export function MiniAppSurvey() {
             <h2 className="text-[24px] sm:text-[26px] font-extrabold text-white">Готово. Вот твоё:</h2>
 
             <div className="flex flex-col gap-4 mt-4">
+              {queuedNotice && (
+                <div className="rounded-[14px] bg-[#d4af6a]/10 border border-[#d4af6a]/40 px-3.5 py-3 text-[13.5px] text-[#f3d9a4]">
+                  Данные уйдут, когда связь восстановится
+                </div>
+              )}
+
               {/* Block 1 — Code word */}
               <div className="rounded-[20px] border border-[#a78bff]/45 bg-gradient-to-br from-[#7c5cff]/15 to-[#121224]/95 p-5 shadow-[0_14px_40px_-12px_rgba(124,92,255,0.35)]">
                 <div className="flex items-center justify-between gap-2.5 px-3.5 py-3 rounded-[14px] bg-[#0a0a12]/75 border border-[#a78bff]/50 shadow-[0_0_24px_rgba(124,92,255,0.25)]">
@@ -371,21 +483,33 @@ export function MiniAppSurvey() {
                 </p>
               </div>
 
-              {/* Block 2 — Video */}
+              {/* Block 2 — Video links only (zero embedded player) */}
               <div className="rounded-[20px] border border-white/[0.08] bg-[#121224] p-5">
                 <h3 className="text-lg font-bold text-white">Видео</h3>
-                <div className="mt-3.5">
-                  <a
-                    href={VIDEO_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center w-full min-h-[52px] px-5 py-3 rounded-2xl bg-gradient-to-br from-[#8a6bff] to-[#6b46f6] border border-white/20 text-white font-bold text-base shadow-[0_8px_28px_-4px_rgba(124,92,255,0.45)] hover:-translate-y-0.5 transition"
-                  >
-                    Смотреть видео (54 минуты)
-                  </a>
-                </div>
-                <p className="mt-3 text-[14.5px] text-[#cfcfdc] leading-relaxed">
-                  В конце видео — то же кодовое слово. Если ты уже смотрел — просто напиши его мне.
+                <p className="mt-2 text-[14.5px] text-[#cfcfdc] leading-relaxed">
+                  54 минуты живых примеров: всё, что я делаю, на моём железе.
+                </p>
+                {activeVideoButtons.length > 0 && (
+                  <div className="flex flex-col gap-2.5 mt-4">
+                    {activeVideoButtons.map((btn, idx) => (
+                      <a
+                        key={btn.key}
+                        href={btn.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`flex items-center justify-center w-full min-h-[50px] px-4 py-3 rounded-2xl font-bold text-[15px] transition ${
+                          idx === 0
+                            ? 'bg-gradient-to-br from-[#8a6bff] to-[#6b46f6] border border-white/20 text-white shadow-[0_8px_28px_-4px_rgba(124,92,255,0.45)] hover:-translate-y-0.5'
+                            : 'bg-white/[0.04] border border-white/10 text-[#e8e8f0] hover:bg-white/[0.08] hover:border-[#7c5cff]/40'
+                        }`}
+                      >
+                        {btn.label}
+                      </a>
+                    ))}
+                  </div>
+                )}
+                <p className="mt-3 text-[13px] text-[#9a9ab0] leading-relaxed">
+                  Видео также придёт тебе в личку с ботом — там оно лежит файлом, со всеми ссылками.
                 </p>
               </div>
 
@@ -427,7 +551,7 @@ export function MiniAppSurvey() {
               <div className="mt-5">
                 <button
                   type="button"
-                  onClick={handleSubmit}
+                  onClick={() => void handleSubmit()}
                   disabled={isSubmitting}
                   className="w-full min-h-[52px] px-5 py-3 rounded-2xl bg-gradient-to-br from-[#8a6bff] to-[#6b46f6] border border-white/20 text-white font-bold text-base shadow-[0_8px_28px_-4px_rgba(124,92,255,0.45)] cursor-pointer"
                 >

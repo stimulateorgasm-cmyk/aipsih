@@ -189,3 +189,63 @@ export function buildLeadPayload(params: {
     utm_campaign: params.utm.utm_campaign,
   };
 }
+
+export const CRM_ENDPOINT = 'https://crm.strah.fun/api/ai-command-leads';
+export const TRIGGER_VIDEO_URL = 'https://crm.strah.fun/api/quiz/trigger-video';
+export const CONSULT_URL = 'https://t.me/Indigopeople_assistant';
+export const VIDEO_BEACON_SENT_KEY = 'ai_command_video_sent';
+
+export interface VideoLinksMap {
+  youtube: string;
+  vk: string;
+  rutube: string;
+  download: string;
+}
+
+export const VIDEO_LINKS: VideoLinksMap = {
+  youtube: '{{YOUTUBE_URL}}',
+  vk: '{{VK_URL}}',
+  rutube: '{{RUTUBE_URL}}',
+  download: '{{DOWNLOAD_URL}}',
+};
+
+export interface VideoLinkButton {
+  key: keyof VideoLinksMap;
+  label: string;
+  url: string;
+}
+
+const VIDEO_LINK_SPECS: ReadonlyArray<{ key: keyof VideoLinksMap; label: string }> = [
+  { key: 'youtube', label: '📺 Смотреть на YouTube' },
+  { key: 'vk', label: '▶️ Смотреть в VK Видео' },
+  { key: 'rutube', label: '🎬 Смотреть в RuTube' },
+  { key: 'download', label: '⬇️ Скачать видео файлом' },
+];
+
+export function isConfiguredLink(url: string | undefined | null): url is string {
+  if (!url) return false;
+  const trimmed = url.trim();
+  return trimmed.length > 0 && !trimmed.startsWith('{{');
+}
+
+export function getActiveVideoLinkButtons(links: VideoLinksMap = VIDEO_LINKS): VideoLinkButton[] {
+  const result: VideoLinkButton[] = [];
+  for (const spec of VIDEO_LINK_SPECS) {
+    const candidate = links[spec.key];
+    if (isConfiguredLink(candidate)) {
+      result.push({ key: spec.key, label: spec.label, url: candidate.trim() });
+    }
+  }
+  return result;
+}
+
+export function buildTriggerVideoUrl(telegramId: string | number, now: number = Date.now()): string {
+  return `${TRIGGER_VIDEO_URL}?telegram_id=${encodeURIComponent(String(telegramId))}&video_key=video_ai_command&test_type=aicommand&_=${now}`;
+}
+
+export function classifySubmitStatus(status: number): 'success' | 'error' | 'queue_and_success' {
+  if (status >= 200 && status < 300) return 'success';
+  if (status >= 400 && status < 500) return 'error';
+  return 'queue_and_success';
+}
+

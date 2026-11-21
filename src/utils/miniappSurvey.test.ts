@@ -6,10 +6,14 @@ import {
   CODE_WORD,
   SURVEY_STEPS,
   buildLeadPayload,
+  buildTriggerVideoUrl,
   canAdvanceStep,
+  classifySubmitStatus,
   createInitialAnswers,
   extractUtmParams,
+  getActiveVideoLinkButtons,
   getProgressLabel,
+  isConfiguredLink,
 } from './miniappSurvey.ts';
 
 const miniappHtmlPath = path.resolve(import.meta.dirname, '../../public/miniapp.html');
@@ -102,6 +106,36 @@ test('buildLeadPayload returns all 18 expected CRM fields including init_data an
   assert.equal(SURVEY_STEPS.length, 8);
 });
 
+test('getActiveVideoLinkButtons hides {{...}} placeholders and reveals configured links', () => {
+  assert.equal(isConfiguredLink('{{YOUTUBE_URL}}'), false);
+  assert.equal(isConfiguredLink('https://youtube.com/watch?v=123'), true);
+  assert.deepEqual(getActiveVideoLinkButtons(), []);
+
+  const active = getActiveVideoLinkButtons({
+    youtube: 'https://youtube.com/watch?v=abc',
+    vk: '{{VK_URL}}',
+    rutube: 'https://rutube.ru/video/xyz',
+    download: '',
+  });
+  assert.deepEqual(active, [
+    { key: 'youtube', label: '📺 Смотреть на YouTube', url: 'https://youtube.com/watch?v=abc' },
+    { key: 'rutube', label: '🎬 Смотреть в RuTube', url: 'https://rutube.ru/video/xyz' },
+  ]);
+});
+
+test('buildTriggerVideoUrl and classifySubmitStatus handle CRM responses correctly', () => {
+  assert.equal(
+    buildTriggerVideoUrl(123456, 1700000000000),
+    'https://crm.strah.fun/api/quiz/trigger-video?telegram_id=123456&video_key=video_ai_command&test_type=aicommand&_=1700000000000',
+  );
+  assert.equal(classifySubmitStatus(200), 'success');
+  assert.equal(classifySubmitStatus(201), 'success');
+  assert.equal(classifySubmitStatus(400), 'error');
+  assert.equal(classifySubmitStatus(422), 'error');
+  assert.equal(classifySubmitStatus(500), 'queue_and_success');
+  assert.equal(classifySubmitStatus(503), 'queue_and_success');
+});
+
 test('public/miniapp.html stays under 500 KB, uses only telegram-web-app.js externally, and preserves verbatim copy', () => {
   const html = fs.readFileSync(miniappHtmlPath, 'utf-8');
   const sizeBytes = Buffer.byteLength(html, 'utf-8');
@@ -113,6 +147,8 @@ test('public/miniapp.html stays under 500 KB, uses only telegram-web-app.js exte
   );
   assert.ok(!html.includes('fonts.googleapis.com'), 'Must not load external Google Fonts');
   assert.ok(!html.includes('cdn.tailwindcss.com'), 'Must not load Tailwind CDN');
+  assert.ok(!html.includes('<video'), 'Must not embed <video> player inside miniapp.html');
+  assert.ok(!html.includes('<iframe'), 'Must not embed <iframe> player inside miniapp.html');
 
   for (const apiCall of [
     'tg.ready()',
@@ -126,8 +162,16 @@ test('public/miniapp.html stays under 500 KB, uses only telegram-web-app.js exte
     'themeParams',
     'localStorage',
     'init_data',
+    'https://crm.strah.fun/api/ai-command-leads',
+    'https://crm.strah.fun/api/quiz/trigger-video',
+    'ai_command_video_sent',
+    'VIDEO_LINKS',
+    '{{YOUTUBE_URL}}',
+    '{{VK_URL}}',
+    '{{RUTUBE_URL}}',
+    '{{DOWNLOAD_URL}}',
   ]) {
-    assert.ok(html.includes(apiCall), `Expected Telegram/storage feature: ${apiCall}`);
+    assert.ok(html.includes(apiCall), `Expected Telegram/CRM/storage feature: ${apiCall}`);
   }
 
   const verbatimInOrder = [
@@ -142,8 +186,8 @@ test('public/miniapp.html stays under 500 KB, uses only telegram-web-app.js exte
     'ЧЕЛОВЕК-ПАУК',
     'Скопировать',
     'Напиши это слово в личку — и я пришлю подарок: стартовый набор нейросетей для психолога с промтами и контактами проверенных продавцов подписок.',
-    'Смотреть видео (54 минуты)',
-    'В конце видео — то же кодовое слово. Если ты уже смотрел — просто напиши его мне.',
+    '54 минуты живых примеров: всё, что я делаю, на моём железе.',
+    'Видео также придёт тебе в личку с ботом — там оно лежит файлом, со всеми ссылками.',
     'Если хочешь понять, что конкретно это даст твоей практике — запишись на разбор. Посмотрим, с чего начать и за сколько встреч окупится.',
     'Записаться на разбор',
     'Данные ушли Антону. Он напишет лично, если увидит, что тебе это полезно.',

@@ -697,10 +697,9 @@
       <!-- Блок 2 — видео -->
       <div class="result-block">
         <h3>Видео</h3>
-        <div style="margin-top:14px">
-          <a class="btn" id="success-video-link" href="https://t.me/Indigopeople_assistant" target="_blank" rel="noopener noreferrer">Смотреть видео (54 минуты)</a>
-        </div>
-        <p class="desc">В конце видео — то же кодовое слово. Если ты уже смотрел — просто напиши его мне.</p>
+        <p class="desc">54 минуты живых примеров: всё, что я делаю, на моём железе.</p>
+        <div id="video-links-list" style="margin-top:14px;display:flex;flex-direction:column;gap:10px"></div>
+        <p class="fine-print" style="margin-top:12px">Видео также придёт тебе в личку с ботом — там оно лежит файлом, со всеми ссылками.</p>
       </div>
 
       <!-- Блок 3 — разбор -->
@@ -746,14 +745,21 @@
 <script>
   (function() {
     // =========================================================================
-    // НАСТРОЙКИ (пропиши сюда свой URL backend CRM и ссылки)
-    // Пример backend endpoint: https://api.indigolab.pro/api/ai-command-leads
+    // НАСТРОЙКИ ССЫЛОК И БЭКЕНДА
+    // Замени {{...}} на реальные URL площадок; незаменённые кнопки не показываются
     // =========================================================================
-    var CRM_ENDPOINT = 'https://YOUR_CRM_DOMAIN/api/ai-command-leads';
-    var VIDEO_URL = 'https://t.me/Indigopeople_assistant';
+    var CRM_ENDPOINT = 'https://crm.strah.fun/api/ai-command-leads';
+    var TRIGGER_VIDEO_URL = 'https://crm.strah.fun/api/quiz/trigger-video';
     var CONSULT_URL = 'https://t.me/Indigopeople_assistant';
     var BOT_URL = 'https://t.me/Indigopeople_assistant';
+    var VIDEO_LINKS = {
+      youtube: '{{YOUTUBE_URL}}',
+      vk: '{{VK_URL}}',
+      rutube: '{{RUTUBE_URL}}',
+      download: '{{DOWNLOAD_URL}}'
+    };
     var QUEUE_STORAGE_KEY = 'indigo_ai_lead_queue';
+    var VIDEO_BEACON_SENT_KEY = 'ai_command_video_sent';
 
     var STEPS = [
       {
@@ -870,11 +876,36 @@
 
     var tgWarningEl = document.getElementById('tg-warning');
     var tgBotLinkEl = document.getElementById('tg-bot-link');
-    var successVideoLinkEl = document.getElementById('success-video-link');
+    var videoLinksListEl = document.getElementById('video-links-list');
     var successConsultLinkEl = document.getElementById('success-consult-link');
     if (tgBotLinkEl) tgBotLinkEl.href = BOT_URL;
-    if (successVideoLinkEl) successVideoLinkEl.href = VIDEO_URL;
     if (successConsultLinkEl) successConsultLinkEl.href = CONSULT_URL;
+
+    function renderVideoLinks() {
+      if (!videoLinksListEl) return;
+      var specs = [
+        { key: 'youtube', label: '📺 Смотреть на YouTube' },
+        { key: 'vk', label: '▶️ Смотреть в VK Видео' },
+        { key: 'rutube', label: '🎬 Смотреть в RuTube' },
+        { key: 'download', label: '⬇️ Скачать видео файлом' }
+      ];
+      videoLinksListEl.innerHTML = '';
+      var activeCount = 0;
+      specs.forEach(function(spec) {
+        var url = VIDEO_LINKS[spec.key];
+        if (!url || url.indexOf('{{') === 0) return;
+        var a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.rel = 'noopener noreferrer';
+        a.className = activeCount === 0 ? 'btn' : 'btn ghost';
+        a.textContent = spec.label;
+        videoLinksListEl.appendChild(a);
+        activeCount += 1;
+      });
+      videoLinksListEl.style.display = activeCount > 0 ? 'flex' : 'none';
+    }
+    renderVideoLinks();
 
     if (!hasValidTgInitData && tgWarningEl) {
       tgWarningEl.classList.add('visible');
@@ -888,6 +919,20 @@
         utm_medium: sp.get('utm_medium') || '',
         utm_campaign: sp.get('utm_campaign') || ''
       };
+    }
+
+    // Автоотправка видео ботом через Image-маяк (один раз за сессию, после успеха)
+    function triggerVideoBeacon() {
+      try {
+        var tgId = tg && tg.initDataUnsafe && tg.initDataUnsafe.user ? tg.initDataUnsafe.user.id : null;
+        if (!tgId) return;
+        if (localStorage.getItem(VIDEO_BEACON_SENT_KEY) === '1') return;
+        localStorage.setItem(VIDEO_BEACON_SENT_KEY, '1');
+        var url = TRIGGER_VIDEO_URL +
+          '?telegram_id=' + encodeURIComponent(tgId) +
+          '&video_key=video_ai_command&test_type=aicommand&_=' + Date.now();
+        new Image().src = url;
+      } catch (e) {}
     }
 
     // Очередь localStorage и повторная досылка при следующем открытии
@@ -914,7 +959,7 @@
 
     function flushQueue() {
       var q = loadQueue();
-      if (!q.length || CRM_ENDPOINT.indexOf('YOUR_CRM_DOMAIN') !== -1) return;
+      if (!q.length || !hasValidTgInitData) return;
       var remaining = [];
       Promise.all(
         q.map(function(item) {
@@ -923,7 +968,7 @@
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(item)
           }).then(function(res) {
-            if (!res.ok) remaining.push(item);
+            if (!res.ok && res.status >= 500) remaining.push(item);
           }).catch(function() {
             remaining.push(item);
           });
@@ -1163,14 +1208,16 @@
         return;
       }
 
-      // Режим локального превью до указания реального CRM_ENDPOINT
-      if (CRM_ENDPOINT.indexOf('YOUR_CRM_DOMAIN') !== -1) {
+      // Если открыто вне Telegram (init_data пустая): не отправляем запрос на CRM,
+      // держим видимым предупреждение «Открой анкету внутри Telegram»
+      if (!hasValidTgInitData) {
         enqueueLead(payload);
+        if (tgWarningEl) tgWarningEl.classList.add('visible');
         setTimeout(function() {
           isSubmitting = false;
           queueNotice.classList.remove('visible');
           showScreen('success');
-        }, 300);
+        }, 280);
         return;
       }
 
@@ -1185,9 +1232,21 @@
       })
         .then(function(res) {
           if (timer) clearTimeout(timer);
-          if (!res.ok) {
-            throw new Error('HTTP ' + res.status);
+          if (res.status >= 400 && res.status < 500) {
+            isSubmitting = false;
+            showScreen('error');
+            return;
           }
+          if (!res.ok) {
+            // 5xx -> сохраняем в очередь localStorage и показываем успех
+            enqueueLead(payload);
+            triggerVideoBeacon();
+            isSubmitting = false;
+            queueNotice.classList.add('visible');
+            showScreen('success');
+            return;
+          }
+          triggerVideoBeacon();
           isSubmitting = false;
           queueNotice.classList.remove('visible');
           showScreen('success');
@@ -1195,9 +1254,10 @@
         .catch(function() {
           if (timer) clearTimeout(timer);
           enqueueLead(payload);
+          triggerVideoBeacon();
           isSubmitting = false;
           queueNotice.classList.add('visible');
-          showScreen('error');
+          showScreen('success');
         });
     }
 
